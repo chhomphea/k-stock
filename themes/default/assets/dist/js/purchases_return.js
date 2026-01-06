@@ -1,0 +1,260 @@
+    $(document).ready(function() {
+        loadItems();
+        $("#date").inputmask("yyyy-mm-dd", {"placeholder": "yyyy-mm-dd"});
+
+        $(document).on('click', '.spodel', function () {
+            var row = $(this).closest('tr');
+            var item_id = row.attr('data-item-id');
+            delete rtpoitem[item_id];
+            row.remove();
+            if(rtpoitem.hasOwnProperty(item_id)) { } else {
+                localStorage.setItem('rtpoitem', JSON.stringify(rtpoitem));
+                loadItems();
+                return;
+            }
+        });
+
+        $("#add_item").autocomplete({
+            source: base_url+'purchases/suggestions',
+            minLength: 1,
+            autoFocus: false,
+            delay: 200,
+            response: function (event, ui) {
+                if ($(this).val().length >= 16 && ui.content[0].id == 0) {
+                    bootbox.alert(lang.no_match_found, function () {
+                        $('#add_item').focus();
+                    });
+                    $(this).val('');
+                }
+                else if (ui.content.length == 1 && ui.content[0].id != 0) {
+                    ui.item = ui.content[0];
+                    $(this).data('ui-autocomplete')._trigger('select', 'autocompleteselect', ui);
+                    $(this).autocomplete('close');
+                }
+                else if (ui.content.length == 1 && ui.content[0].id == 0) {
+                    bootbox.alert(lang.no_match_found, function () {
+                        $('#add_item').focus();
+                    });
+                    $(this).val('');
+                }
+            },
+            select: function (event, ui) {
+                event.preventDefault();
+                if (ui.item.id !== 0) {
+                    var row = add_order_item(ui.item);
+                    if (row)
+                        $(this).val('');
+                } else {
+                    bootbox.alert(lang.no_match_found);
+                }
+            }
+        });
+
+        $('#add_item').bind('keypress', function (e) {
+            if (e.keyCode == 13) {
+                e.preventDefault();
+                $(this).autocomplete("search");
+            }
+        });
+
+        $('#add_item').focus();
+        $('#reset').click(function (e) {
+            bootbox.confirm(lang.r_u_sure, function (result) {
+                if (result) {
+                    if (get('rtpoitem')) {
+                        remove('rtpoitem');
+                    }
+
+                    window.location.reload();
+                }
+            });
+        });
+
+        $(document).on("change", '.rquantity', function () {
+            var row = $(this).closest('tr');
+            var new_qty = parseFloat($(this).val()),
+            item_id = row.attr('data-item-id');
+            rtpoitem[item_id].row.qty = new_qty;
+            rtpoitem[item_id].row.stock_quantity = new_qty*rtpoitem[item_id].row.quantity_perunit;
+            store('rtpoitem', JSON.stringify(rtpoitem));
+            loadItems();
+        });
+
+        $(document).on("change", '.rcost', function () {
+            var row = $(this).closest('tr');
+            var new_cost = parseFloat($(this).val()),
+            item_id = row.attr('data-item-id');
+            rtpoitem[item_id].row.cost = new_cost;
+            rtpoitem[item_id].row.real_unit_cost = new_cost;
+            store('rtpoitem', JSON.stringify(rtpoitem));
+            loadItems();
+        });
+
+        $(document).on("change", '.rdiscount', function () {
+            var row = $(this).closest('tr');
+            var new_discount = $(this).val(),
+            item_id = row.attr('data-item-id');
+            rtpoitem[item_id].row.discount = new_discount;
+            store('rtpoitem', JSON.stringify(rtpoitem));
+            loadItems();
+        });
+        $(document).on("change", '.select2_unit', function () {
+
+            var row = $(this).closest('tr');
+            var new_unit = parseFloat($(this).val()),
+            item_id = row.attr('data-item-id');
+            // +++++++++++++++++++++++++Quantity AND Cost++++++++++++++++++++++
+            var item = rtpoitem[item_id];
+            var stock_quantity = 1;
+            var old_cost = item.row.real_unit_cost;
+            rtpoitem[item_id].row.real_unit_cost
+	        if(new_unit != rtpoitem[item_id].row.unit) {
+	            $.each(item.units, function() {
+	                if (this.id == new_unit) {
+	                    stock_quantity = baseUnit(1, this)*rtpoitem[item_id].row.qty;
+	                    rtpoitem[item_id].row.cost             = parseFloat(baseUnit(1, this)*old_cost);
+                        rtpoitem[item_id].row.operation        = this.operation;
+	                    rtpoitem[item_id].row.quantity_perunit = this.operation_value;
+	                }
+	            });
+	        }else{
+	        	rtpoitem[item_id].row.cost             = rtpoitem[item_id].row.real_unit_cost;
+                rtpoitem[item_id].row.operation        ='*';
+	        	rtpoitem[item_id].row.quantity_perunit = 1;
+	        	stock_quantity                         = rtpoitem[item_id].row.qty;
+	        }
+	        // +++++++++++++++++++++++++++++++++++++++++++++++
+            rtpoitem[item_id].row.default_purchase_unit = new_unit;
+            rtpoitem[item_id].row.stock_quantity 		= stock_quantity;
+            store('rtpoitem', JSON.stringify(rtpoitem));
+            loadItems();
+        });
+    });
+function baseUnit(qty, unitObj) {
+    switch(unitObj.operation) {
+        case '*':
+            return parseFloat(qty)*parseFloat(unitObj.operation_value);
+            break;
+        case '/':
+            return parseFloat(qty)/parseFloat(unitObj.operation_value);
+            break;
+        case '+':
+            return parseFloat(qty)+parseFloat(unitObj.operation_value);
+            break;
+        case '-':
+            return parseFloat(qty)-parseFloat(unitObj.operation_value);
+            break;
+    }
+}
+function calculateQTY(qty,operation,qty_perunit){
+    switch(operation) {
+      case '*':
+          return parseFloat(qty)*parseFloat(qty_perunit);
+          break;
+      case '/':
+          return parseFloat(qty)/parseFloat(qty_perunit);
+          break;
+      case '+':
+          return parseFloat(qty)+parseFloat(qty_perunit);
+          break;
+      case '-':
+          return parseFloat(qty)-parseFloat(qty_perunit);
+          break;
+    }
+}
+function loadItems() {
+    if (get('rtpoitem')) {
+        total = 0;
+        $("#poTable tbody").empty();
+        rtpoitem = JSON.parse(get('rtpoitem'));
+        var no =1;
+        $.each(rtpoitem, function () {
+            var item = this;
+            var item_id = Settings.item_addition == 1 ? item.item_id : item.id;
+            var option_unit ='';
+            $.each(item.units, function () {
+                if(this.id == item.row.default_purchase_unit) {
+                    option_unit += "<option selected value='"+this.id+"'>"+this.name+"</option>";
+                    item.row.operation = this.operation;
+                    item.row.quantity_perunit = this.operation_value;
+                } else {
+                    option_unit += "<option value='"+this.id+"'>"+this.name+"</option>";
+                    item.row.quantity_perunit = this.operation_value;
+                }
+            });
+            rtpoitem[item_id] = item;
+            if (item.row.unit != item.row.default_purchase_unit) {
+              item.row.stock_quantity = calculateQTY(item.row.qty,item.row.operation,item.row.quantity_perunit);
+            }else{
+              item.row.stock_quantity = item.row.qty;
+            }
+            var product_id = item.row.id, 
+            	item_cost = item.row.cost, 
+            	item_qty = item.row.qty, 
+            	stock_quantity = item.row.stock_quantity, 
+            	item_code = item.row.code,
+            item_name = item.row.name.replace(/"/g, "&#034;").replace(/'/g, "&#039;");
+            var row_no = (new Date).getTime();
+            row_no=row_no+item_id;
+            var ds = item.row.discount ? item.row.discount : '0';
+            var item_discount = formatDecimal(ds);
+            if (ds.indexOf('%') !== -1) {
+                var pds = ds.split('%');
+                if (!isNaN(pds[0])) {
+                  item_discount = formatDecimal(parseFloat((item.row.cost * parseFloat(pds[0])) / 100), 4);
+                }
+            }
+            var real_unit_cost = formatDecimal(parseFloat(item.row.cost)-parseFloat(item_discount));
+            var newTr = $('<tr id="' + row_no + '" class="' + item_id + '" data-item-id="' + item_id + '"></tr>');
+            tr_html = '<td style="min-width:25px;" class="text-center"><span class="row_no" id="row_no_' + row_no + '">' + no +'</span></td>';
+            tr_html += '<td style="min-height:100px;">'+
+            				'<input name="product_id[]" type="hidden" class="rid" value="' + product_id + '"><span class="sname" id="name_' + row_no + '">' + item_name + ' (' + item_code + ')</span>'+
+            			'</td>';
+            tr_html += '<td style="padding:2px;">'+
+            				'<input class="stock_quantity" name="stock_quantity[]" type="hidden" value="' + formatDecimal(stock_quantity) + '" data-id="' + row_no + '" data-item="' + item_id + '" id="quantity_' + row_no + '">'+
+            				'<input class="form-control input-md kb-pad text-center rquantity" name="quantity[]" type="text" value="' + formatDecimal(item_qty) + '" data-id="' + row_no + '" data-item="' + item_id + '" id="quantity_' + row_no + '">'+
+            			'</td>';
+            tr_html += '<td style="padding:2px;">'+
+            				'<input name="item_discount[]" type="hidden" value="'+formatDecimal(item_discount)*formatDecimal(item_qty)+'">'+
+                            '<input class="form-control kb-pad text-center rdiscount" name="discount[]" type="text" value="'+item.row.discount+'" data-id="' + row_no + '" data-item="' + item_id + '" id="dicount_' + row_no + '">'+
+            			'</td>';
+            tr_html += '<td style="padding:2px;">'+
+            				'<input class="runit" name="unit[]" type="hidden" value="'+item.row.unit+'" data-id="' + row_no + '" data-item="' + item_id + '" id="runit_' + row_no + '">'+
+            				'<input class="roperation_value" name="operation_value[]" type="hidden" value="'+item.row.quantity_perunit+'" data-id="' + row_no + '" data-item="' + item_id + '" id="operation_value_' + row_no + '">'+
+            				'<select class="form-control select select2_unit" name="tran_unit[]">'+option_unit+'</select>'+
+            			'</td>';
+            tr_html += '<td style="padding:2px; min-width:80px;">'+
+            				'<input class="form-control input-md kb-pad text-center rcost" name="cost[]" type="text" value="' + formatDecimal(item_cost,2) + '" data-id="' + row_no + '" data-item="' + item_id + '" id="cost_' + row_no + '" onClick="this.select();">'+
+            				'<input class="real_unit_cost" name="real_unit_cost[]" type="hidden" value="' + formatDecimal(real_unit_cost,2) + '" data-id="' + row_no + '" data-item="' + item_id + '" id="real_unit_cost_' + row_no + '">'+
+            			'</td>';
+            tr_html += '<td class="text-right">'+
+            				'<span class="text-right ssubtotal" id="subtotal_' + row_no + '">' + formatMoney(parseFloat(real_unit_cost) * parseFloat(item_qty)) + '</span>'+
+            			'</td>';
+            tr_html += '<td class="text-center">'+
+            				'<i class="fa fa-trash-o tip pointer spodel text-danger" id="' + row_no + '" title="Remove"></i>'+
+            			'</td>';
+            newTr.html(tr_html);
+            newTr.prependTo("#poTable");
+            no++;
+            total += (parseFloat(real_unit_cost) * parseFloat(item_qty));
+
+        });
+        grand_total = formatMoney(total);
+        $("#gtotal").text(grand_total);
+        $('#add_item').focus();
+    }
+}
+
+function add_order_item(item) {
+
+    var item_id = Settings.item_addition == 1 ? item.item_id : item.id;
+    if (rtpoitem[item_id]) {
+        rtpoitem[item_id].row.qty = parseFloat(rtpoitem[item_id].row.qty) + 1;
+    } else {
+        rtpoitem[item_id] = item;
+    }
+
+    store('rtpoitem', JSON.stringify(rtpoitem));
+    loadItems();
+    return true;
+}

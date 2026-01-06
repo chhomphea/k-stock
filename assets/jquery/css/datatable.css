@@ -1,0 +1,295 @@
+:root {
+	--dt-row-selected: 13, 110, 253;
+	--dt-row-selected-text: 255, 255, 255;
+	--dt-row-hover: 0, 0, 0;
+	--dt-row-stripe: 0, 0, 0;
+	--dt-html-background: white;
+}
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #888 #f0f0f0;
+}
+:root.dark {
+	--dt-html-background: white;
+	--dt-row-hover: 0, 0, 0;
+	--dt-row-stripe: 0, 0, 0;
+}
+table.dataTable {
+	width: 100%;
+	margin: 0 auto;
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+table.dataTable thead th, table.dataTable tfoot th {
+	font-weight: bold;
+	text-align: center;
+	padding: 2px;
+	border: 1px solid #e5e7ebc4;
+	background-color: #e5e7ebc4;
+	white-space: nowrap;
+	font-size: 14px !important;
+}
+
+table.dataTable tbody td {
+	padding: 3px;
+	white-space: nowrap;
+	background-color: #fff;
+	border-color: #f5f5f67d !important;
+	font-size: 13px !important;
+}
+
+table.dataTable tbody tr {
+	background-color: #fff; /* Ensure row background is white */
+}
+
+table.dataTable tbody tr.selected > * {
+	background-color: #fff; /* Override selected state to white */
+	color: rgb(var(--dt-row-selected-text));
+}
+
+table.dataTable tbody tr.odd > * {
+	background-color: #fff; /* Override stripe to white */
+}
+
+table.dataTable tbody tr:hover > * {
+	background-color: #fff; /* Override hover to white */
+}
+
+table.dataTable thead th.sorting,
+table.dataTable thead th.sorting_asc,
+table.dataTable thead th.sorting_desc,
+table.dataTable thead th.sorting_asc_disabled,
+table.dataTable thead th.sorting_desc_disabled {
+	cursor: pointer;
+	position: relative;
+	padding-right: 26px;
+}
+
+table.dataTable thead th.sorting:before,
+table.dataTable thead th.sorting_asc:before,
+table.dataTable thead th.sorting_desc:before,
+table.dataTable thead th.sorting_asc_disabled:before {
+	content: "▲";
+	position: absolute;
+	right: 10px;
+	bottom: 40%;
+	font-size: 0.8em;
+	opacity: 0.125;
+}
+
+table.dataTable thead th.sorting:after,
+table.dataTable thead th.sorting_asc:after,
+table.dataTable thead th.sorting_desc:after,
+table.dataTable thead th.sorting_desc_disabled:after {
+	content: "▼";
+	position: absolute;
+	right: 10px;
+	top: 40%;
+	font-size: 0.8em;
+	opacity: 0.125;
+}
+
+table.dataTable thead th.sorting_asc:before,
+table.dataTable thead th.sorting_desc:after {
+	opacity: 0.6;
+}
+
+table.dataTable thead th.sorting_asc_disabled:before {
+	content: "▲";
+	display: block;
+}
+
+table.dataTable thead th.sorting_desc_disabled:after {
+	content: "▼";
+	display: block;
+}
+
+table.dataTable thead th.sorting_asc_disabled:after,
+table.dataTable thead th.sorting_desc_disabled:before {
+	display: none;
+}
+
+table.dataTable td.dt-control {
+	text-align: center;
+	cursor: pointer;
+}
+
+table.dataTable td.dt-control:before {
+	display: inline-block;
+	color: rgba(0, 0, 0, 0.5);
+	content: "►";
+}
+
+table.dataTable tr.dt-hasChild td.dt-control:before {
+	content: "▼";
+}
+
+html.dark table.dataTable td.dt-control:before,
+html.dark table.dataTable tr.dt-hasChild td.dt-control:before {
+	color: rgba(255, 255, 255, 0.5);
+}
+
+html.dark table.dataTable thead th {
+	border: 1px solid rgb(89, 91, 94);
+	background-color: #fff; /* Ensure dark theme th is white */
+}
+
+html.dark table.dataTable tbody tr.odd > * {
+	background-color: #fff; /* Ensure dark theme odd rows are white */
+}
+
+html.dark table.dataTable tbody tr:hover > * {
+	background-color: #fff; /* Ensure dark theme hover is white */
+}
+
+.dataTables_wrapper {
+	position: relative;
+	clear: both;
+}
+
+.dataTables_wrapper .dataTables_length {
+	float: left;
+}
+
+.dataTables_wrapper .dataTables_length select {
+	border: 1px solid #aaa;
+	border-radius: 3px;
+	padding: 3px;
+	background-color: transparent;
+}
+
+.dataTables_wrapper .dataTables_filter {
+	float: right;
+	text-align: right;
+	padding-bottom: 10px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+	border: 1px solid #aaa;
+	border-radius: 3px;
+	padding: 3px;
+	background-color: transparent;
+	margin-left: 3px;
+	margin-top: -5px;
+}
+
+.dataTables_wrapper .dataTables_info {
+	float: left;
+	padding-top: 0.5em;
+}
+
+.dataTables_wrapper .dataTables_paginate {
+	float: right;
+	padding-top: 0.25em;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+	display: inline-block;
+	width: 2em;
+	height: 2em;
+	line-height: 1.6em;
+	padding: 2px 8px;
+	margin-left: 4px;
+	text-align: center;
+	cursor: pointer;
+	border: 1px solid transparent;
+	border-radius: 8px;
+	background: transparent;
+	background-color: #e8eefc;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+	background: rgba(0, 0, 0, 0.05);
+	line-height: 1.6rem;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+	color: white;
+	border: 1px solid gray;
+	/*background: #111;*/
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:active {
+	background: #0c0c0c;
+	box-shadow: inset 0 0 3px #111;
+}
+html.dark .dataTables_wrapper .dataTables_filter input,
+html.dark .dataTables_wrapper .dataTables_length select {
+	border: 1px solid rgba(255, 255, 255, 0.2);
+	background-color: #fff;
+}
+html.dark .dataTables_wrapper .dataTables_paginate .paginate_button.current,
+html.dark .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+	border: 1px solid rgb(89, 91, 94);
+	/*background: rgba(255, 255, 255, 0.15);*/
+}
+html.dark .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+	border: 1px solid rgb(53, 53, 53);
+	/*background: rgb(53, 53, 53);*/
+}
+
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody > table > thead > tr > th > div.dataTables_sizing,
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody > table > thead > tr > td > div.dataTables_sizing,
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody > table > tbody > tr > th > div.dataTables_sizing,
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody > table > tbody > tr > td > div.dataTables_sizing {
+	height: 0;
+	overflow: hidden;
+	margin: 0 !important;
+	padding: 0 !important;
+	visibility: hidden;
+}
+
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody > table > thead > tr > th > div.dataTables_sizing:before,
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody > table > thead > tr > th > div.dataTables_sizing:after,
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody > table > thead > tr > td > div.dataTables_sizing:before,
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody > table > thead > tr > td > div.dataTables_sizing:after,
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody > table > tbody > tr > th > div.dataTables_sizing:before,
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody > table > tbody > tr > th > div.dataTables_sizing:after,
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody > table > tbody > tr > td > div.dataTables_sizing:before,
+.dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody > table > tbody > tr > td > div.dataTables_sizing:after {
+	display: none;
+}
+
+@media screen and (max-width: 640px) {
+	.dataTables_wrapper .dataTables_length,
+	.dataTables_wrapper .dataTables_filter,
+	.dataTables_wrapper .dataTables_info,
+	.dataTables_wrapper .dataTables_paginate {
+		float: none;
+		text-align: center;
+	}
+	.dataTables_wrapper .dataTables_filter,
+	.dataTables_wrapper .dataTables_paginate {
+		margin-top: 0.5em;
+	}
+}
+table.dataTable thead>tr>th.sorting_desc_disabled:after,
+table.dataTable thead>tr>th.sorting_asc_disabled:before,
+table.dataTable thead>tr>td.sorting_desc_disabled:after,
+table.dataTable thead>tr>td.sorting_asc_disabled:before {
+	display: none;
+}
+
+table.dataTable thead>tr>th:active,
+table.dataTable thead>tr>td:active {
+	outline: none;
+}
+
+div.dataTables_scrollBody>table.dataTable>thead>tr>th:before,
+div.dataTables_scrollBody>table.dataTable>thead>tr>th:after,
+div.dataTables_scrollBody>table.dataTable>thead>tr>td:before,
+div.dataTables_scrollBody>table.dataTable>thead>tr>td:after {
+	display: none;
+}
+.dataTables_filter input {
+    border-radius: 4px !important;
+    border: 1px solid #ccc !important;
+    padding: 4px 10px !important;
+    transition: all 0.2s ease-in-out !important;
+}
+.dataTables_filter input:focus {
+    border-color: #4a90e2 !important;
+    box-shadow: 0 0 3px rgba(74,144,226,0.4) !important;
+}
+input:focus {
+    outline: none !important;
+    border: 1px solid #d1d5db8c !important;
+    box-shadow: none !important;
+}

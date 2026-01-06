@@ -1,0 +1,11 @@
+CREATE TABLE `helpyou`.`payments`  (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `invoice_id` int NULL,
+    `paid_by` int NULL,
+    `amount` decimal(10, 3) NULL,
+    `balance` decimal(10, 3) NULL,
+    `created_by` int(11) NULL,
+    `date` datetime NULL,
+    `created_at` datetime NULL,
+  PRIMARY KEY (`id`)
+);

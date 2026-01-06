@@ -1,0 +1,61 @@
+<html>
+                    <div class="clearfix"></div>
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <img class="logo-report" src="https://povsambath.wintech.com.kh/uploads/Cashew_1.png" alt="POS">
+                        </div>
+                        <div class="col-xs-8 header_report">
+                        <table style="width:100%">
+                            <tbody><tr>
+                                <td colspan="9" style="text-align:center !important;">
+                                    <h5 class="text-center text-uppercase">Sale By Customer</h5>
+                                    <h5 class="text-center text-uppercase">
+                                        Sale Date From : 22/Jul/2025 12:00 PM  To : 31/Jul/2025 12:00 PM                                     </h5>
+                                </td>
+                            </tr>
+                        </tbody></table>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="table-responsive">
+                                <table id="PrRData" class="table table-striped table-bordered table-hover table_report" style="margin-bottom:5px;">
+                                    <thead>
+                                        <tr class="active">
+                                            <th width="3%">No</th>
+                                            <th width="20%">Name</th>
+                                            <th width="10%">Sale Staff</th>
+                                            <th width="10%">Phone</th>
+                                            <th width="10%">Amount</th>
+                                            <th width="10%">Paid</th>
+                                            <th width="10%">Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                                                                    <tr>
+                                                <td class="text-center">1</td>
+                                                <td class="text-left"> អតិថិជនទូទៅ</td>
+                                                <td class="text-left"></td>
+                                                <td class="text-left">N/A</td>
+                                                <td class="text-right">$6.0000</td>
+                                                <td class="text-right">$0.0000</td>
+                                                <td class="text-right">$6.0000</td>
+                                            </tr>
+                                                                            </tbody>
+                                    <tfoot>
+                                        <tr class="">
+                                            <td colspan="4" class="text-right"><b>Total</b></td>
+                                            <td class="text-right">
+                                                <b>$6.0000</b>
+                                            </td>
+                                            <td class="text-right">
+                                                <b>$0.0000</b>
+                                            </td>
+                                            <td class="text-right">
+                                                <b>$6.0000</b>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </table></body></html>
