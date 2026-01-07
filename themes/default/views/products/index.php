@@ -19,7 +19,7 @@
         
         <div class="collapse show" id="createFormBody">
             <div class="card-body">
-                <?php echo form_open_multipart(isset($product->id) ? "products/edit/".$product->id : "products/add"); ?>
+                <?php echo form_open_multipart(isset($product->id) ? "products/edit/".$product->id : "products/create"); ?>
                     <div class="row g-0">
                         <div class="col-md-6 pe-md-3 d-flex flex-column">
                             <div class="form-group mb-3">
@@ -49,6 +49,14 @@
                                     }
                                 ?>
                                 <?= form_dropdown('unit', $unitArr, $product->unit_id, 'class="form-select w-100 select2-basic" id="unit" style="width:100%;"'); ?>
+                            </div>
+                            <div class="form-group mb-3">
+                                <?= lang('cost', 'cost'); ?> <span class="text-danger">*</span>
+                                <?= form_input('cost', $product->cost, 'class="form-control" id="cost" placeholder="Product cost"'); ?>
+                            </div>
+                            <div class="form-group mb-3">
+                                <?= lang('price', 'price'); ?> <span class="text-danger">*</span>
+                                <?= form_input('price', $product->price, 'class="form-control" id="price" placeholder="Product price"'); ?>
                             </div>
                         </div>
                     </div>

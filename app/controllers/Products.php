@@ -11,19 +11,17 @@ class Products extends MY_Controller {
     }
     public function create() {
         $this->checkRule('product_add', false);
-        $this->form_validation->set_rules('name', lang('product_name'), 'required');
-        $this->form_validation->set_rules('code', lang('product_code'), 'required');
+        $this->form_validation->set_rules('name', lang('name'), 'required');
+        $this->form_validation->set_rules('code', lang('code'), 'required');
         if ($this->form_validation->run() == true) {
             $data = [
                 'code'          => $this->input->post('code'),
                 'name'          => $this->input->post('name'),
                 'category_id'   => $this->input->post('category'),
                 'unit_id'       => $this->input->post('unit'),
-                'cost'          => $this->input->post('cost'),
                 'price'         => $this->input->post('price'),
                 'cost'          => $this->input->post('cost'),
-                'active'          => $this->input->post('display'),
-                'order_display' => $this->input->post('order_display'),
+                'active'        => 1,
                 'created_by'    => $this->session->userdata('user_id'),
                 'image'         => 'no_image.png',
             ];
@@ -61,8 +59,8 @@ class Products extends MY_Controller {
                 'category_id'   => $this->input->post('category'),
                 'unit_id'       => $this->input->post('unit'),
                 'cost'          => $this->input->post('cost'),
-                // 'price'         => $this->input->post('price'),
-                // 'cost'          => $this->input->post('cost'),
+                'price'         => $this->input->post('price'),
+                'cost'          => $this->input->post('cost'),
                 // 'active'        => $this->input->post('display'),
                 // 'order_display' => $this->input->post('order_display'),
                 'updated_by'    => $this->session->userdata('user_id'),
