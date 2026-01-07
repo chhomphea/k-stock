@@ -1,19 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product List | Stock Manager</title>
-
+    <title>HELP STOCK</title>
     <link href="<?=base_url('assets/jquery/css/bootstrap.min.css')?>" rel="stylesheet">
     <link href="<?=base_url('assets/css/font.css')?>" rel="stylesheet">
     <link href="<?=base_url('assets/css/style.css')?>" rel="stylesheet">
     <link href="<?=base_url('assets/css/select2.css')?>" rel="stylesheet">
     <link href="<?=base_url('assets/jquery/css/datatable.css')?>" rel="stylesheet">
-
-    <!-- <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Inter:wght@300;400;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet"> -->
-
     <script src="<?=base_url('assets/jquery/js/jquery.min.js')?>"></script>
     <script src="<?=base_url('assets/jquery/js/select2.js')?>"></script>
 </head>

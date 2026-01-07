@@ -40,7 +40,7 @@
             });
             
             $(document).on('click', '.product-img', function() {
-                var src = $(this).attr('src');
+                var src = $(this).attr('data-full');
                 $('#modalImage').attr('src', src);
                 new bootstrap.Modal(document.getElementById('imagePreviewModal')).show();
             });

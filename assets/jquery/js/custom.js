@@ -2,7 +2,6 @@ function dislayImage(n) {
     if (n !== null && n !== '') {
         var imgPath = base_url + 'assets/uploads/thumbs/' + n;
         var fullPath = base_url + 'assets/uploads/' + n;
-        
         return '<img src="' + imgPath + '" ' +
                'data-full="' + fullPath + '" ' + 
                'class="product-img" ' + 
