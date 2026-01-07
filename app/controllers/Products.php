@@ -85,7 +85,7 @@ class Products extends MY_Controller {
     public function get_products() {
         $actions = '<div class="dropdown">
                         <button class="action-btn" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="material-icons-outlined">more_vert</span>
+                            <span class="material-icons-outlined">menu</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                             <li>

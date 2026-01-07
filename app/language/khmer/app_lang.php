@@ -1,8 +1,15 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 $lang['dashboard']                            	= 'ផ្ទាំងគ្រប់គ្រង';
+$lang['products']                        		= 'គ្រប់គ្រងទំនិញលក់';
+$lang['sales']                            		= 'គ្រប់គ្រងការលក់';
+$lang['settings']                            	= 'ការកំណត់ប្រព័ន្ធ';
+$lang['list_products']                      	= "បញ្ជីទំនិញលក់";
 $lang['english']                              	= 'ភាសារអង់គ្លេស';
 $lang['khmer']                                	= 'ភាសារខ្មែរ';
+$lang['categories']                             = 'ប្រភេទទំនិញ';
+$lang['price']                             		= 'តម្លៃ';
+$lang['product_managerment']                    = 'គ្រ';
 $lang['users']                                	= 'បញ្ជីអ្នកប្រើប្រាស់';
 $lang['setup']                                	= "ការតំឡើងប្រព័ន្ធ";
 $lang['user_managerment']                     	= "គ្រប់គ្រង់អ្នកប្រើប្រាស់";

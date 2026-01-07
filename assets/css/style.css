@@ -82,10 +82,9 @@
         .sidebar-submenu li a.active .material-icons-outlined { color: var(--theme-accent); }
 
         .main-content { margin-left: var(--sidebar-width); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
-
         .topbar {
             height: var(--header-height); background: #ffffff; display: flex; align-items: center;
-            justify-content: space-between; padding: 0 1rem; border-bottom: 1px solid var(--border-color);
+            justify-content: space-between; padding: 0 0.4rem; border-bottom: 1px solid var(--border-color);
             flex-shrink: 0; z-index: 900;
         }
         .toggle-btn { cursor: pointer; color: #64748b; padding: 0; border: none; background: transparent !important; }
