@@ -145,7 +145,7 @@ class Sales extends MY_Controller {
         $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
         $bc                  = [['link' => site_url('bookings'), 'page' => lang('list_bookings')]];
         $meta                = ['page_title' => lang('list_bookings'), 'bc' => $bc];
-        $this->page_construct('bookings/index', $this->data, $meta);
+        $this->page_construct('sales/index', $this->data, $meta);
     }
     function getRoomsBybranchs () {
         $branch     = $this->input->get('branch');

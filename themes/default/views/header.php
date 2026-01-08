@@ -126,8 +126,8 @@
                     </li>
                     <li>
                         <a href="#">
-                            <span class="material-icons-outlined sub-icon">add</span>
-                            <?=lang('create_sale')?>
+                            <span class="material-icons-outlined sub-icon">money</span>
+                            <?=lang('sale_payment')?>
                         </a>
                     </li>
                 </ul>
