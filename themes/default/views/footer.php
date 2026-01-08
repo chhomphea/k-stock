@@ -19,8 +19,8 @@
         $(window).on('load', function() {
             setTimeout(function() {
                 $('#pageLoader').addClass('fade-out');
-                setTimeout(function(){ $('#pageLoader').remove(); }, 500);
-            }, 600);
+                setTimeout(function(){ $('#pageLoader').remove(); }, 200);
+            }, 300);
         });
         var base_url = "<?=base_url()?>";
         $(document).ready(function() {
@@ -28,17 +28,6 @@
             $('#categorySelect').on('select2:select', function (e) {
                 if(e.params.data.id === 'create_new') { $(this).val(null).trigger('change'); alert("Logic to open 'Create Category' modal goes here!"); }
             });
-
-            $('#productsTable').DataTable({
-                "language": {
-                    "search": "", "searchPlaceholder": "Search products...",
-                    "paginate": { "previous": "<span class='material-icons-outlined' style='font-size:1rem !important'>chevron_left</span>", "next": "<span class='material-icons-outlined' style='font-size:1rem !important'>chevron_right</span>" },
-                    "zeroRecords": `<div class="text-center p-4"><span class="material-icons-outlined text-muted" style="font-size:48px;">inventory_2</span><p class="mb-0 mt-2 text-muted" style="font-size:0.8rem;">No products found.</p></div>`
-                },
-                "dom": '<"d-flex justify-content-between align-items-center px-3 py-2"f>t<"d-flex justify-content-between align-items-center px-3 py-3"ip>',
-                "columnDefs": [ { "orderable": false, "targets": [0, 1, 7] } ]
-            });
-            
             $(document).on('click', '.product-img', function() {
                 var src = $(this).attr('data-full');
                 $('#modalImage').attr('src', src);
@@ -53,8 +42,8 @@
                 if(width <= 992) { $('#sidebar').toggleClass('active'); $('#sidebar-overlay').toggleClass('active'); } 
                 else {
                     var marginLeft = $('.main-content').css('margin-left');
-                    if (marginLeft === '0px') { $('.main-content').css('margin-left', '280px'); $('#sidebar').css('margin-left', '0'); } 
-                    else { $('.main-content').css('margin-left', '0px'); $('#sidebar').css('margin-left', '-280px'); }
+                    if (marginLeft === '0px') { $('.main-content').css('margin-left', '300px'); $('#sidebar').css('margin-left', '0'); } 
+                    else { $('.main-content').css('margin-left', '0px'); $('#sidebar').css('margin-left', '-300px'); }
                 }
             }
 

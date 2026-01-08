@@ -9,13 +9,13 @@
     --border-color: #e2e8f0;
     --text-heading: #1A5276;
     --text-body: #334155;
-    --sidebar-width: 270px;
+    --sidebar-width: 300;
     --header-height: 48px;
 }
 
 @media (min-width: 1400px) {
     :root {
-        --sidebar-width: 280px;
+        --sidebar-width: 300px;
     }
 }
 
@@ -136,7 +136,6 @@ body {
     background-color: rgba(0, 0, 0, 0.2);
     color: #ffffff;
     font-weight: 600;
-    border-left-color: var(--theme-accent);
 }
 
 .sidebar-menu .nav-link.active .material-icons-outlined {
