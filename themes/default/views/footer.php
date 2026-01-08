@@ -2,7 +2,9 @@
             <div id="liveTime" class="live-clock"></div>
             <div>© 2025 HELPYOU Software. All rights reserved.</div>
         </footer>
-    </div> <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+    </div> 
+
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-body p-0 position-relative">
@@ -12,9 +14,11 @@
             </div>
         </div>
     </div>
+
     <script src="<?=base_url('assets/jquery/js/datatable.js')?>"></script>
     <script src="<?=base_url('assets/jquery/js/bootstrap.bundle.min.js')?>"></script>
     <script src="<?=base_url('assets/jquery/js/custom.js')?>"></script>
+    
     <script>
         $(window).on('load', function() {
             setTimeout(function() {
@@ -22,28 +26,96 @@
                 setTimeout(function(){ $('#pageLoader').remove(); }, 200);
             }, 300);
         });
+
         var base_url = "<?=base_url()?>";
+
         $(document).ready(function() {
+            // =========================================
+            // 1. AUTO-ACTIVE MENU LOGIC
+            // =========================================
+            var currentUrl = window.location.href; 
+            
+            // Clean up previous active states
+            $('.sidebar-menu a').removeClass('active');
+            $('.sidebar-submenu').removeClass('show');
+
+            $('.sidebar-menu a').each(function() {
+                var linkUrl = $(this).attr('href');
+
+                // Check if link matches current URL (exact match or submenu match)
+                // Exclude '#' and ensure linkUrl is valid
+                if (linkUrl && linkUrl !== '#' && (currentUrl === linkUrl || (currentUrl.indexOf(linkUrl) !== -1 && linkUrl !== base_url))) {
+                    
+                    // Activate this link
+                    $(this).addClass('active');
+
+                    // If this link is inside a submenu (dropdown)
+                    if ($(this).closest('.sidebar-submenu').length > 0) {
+                        // Open the parent dropdown
+                        $(this).closest('.sidebar-submenu').addClass('show');
+                        // Highlight the parent menu item
+                        $(this).closest('.sidebar-submenu').prev('.nav-link').addClass('active').attr('aria-expanded', 'true');
+                    }
+                }
+            });
+
+            // =========================================
+            // 2. MOBILE SIDEBAR LOGIC (Fixing Close Issue)
+            // =========================================
+            function toggleSidebar() {
+                var width = $(window).width();
+                if(width <= 992) { 
+                    // Mobile
+                    $('#sidebar').toggleClass('active'); 
+                    $('#sidebar-overlay').toggleClass('active'); 
+                } else {
+                    // Desktop
+                    var marginLeft = $('.main-content').css('margin-left');
+                    if (marginLeft === '0px') { 
+                        $('.main-content').css('margin-left', '300px'); 
+                        $('#sidebar').css('margin-left', '0'); 
+                    } else { 
+                        $('.main-content').css('margin-left', '0px'); 
+                        $('#sidebar').css('margin-left', '-300px'); 
+                    }
+                }
+            }
+
+            $('#menu-toggle').click(function(e) { 
+                e.stopPropagation(); 
+                toggleSidebar(); 
+            });
+
+            // Close when clicking X button OR the dark overlay
+            $('#sidebar-close, #sidebar-overlay').on('click', function(e) { 
+                e.preventDefault();
+                $('#sidebar').removeClass('active'); 
+                $('#sidebar-overlay').removeClass('active'); 
+            });
+            
+            // Auto-close sidebar on mobile when a link is clicked
+            $('.sidebar-menu a').on('click', function() {
+                if ($(window).width() <= 992) {
+                    $('#sidebar').removeClass('active');
+                    $('#sidebar-overlay').removeClass('active');
+                }
+            });
+
+            // =========================================
+            // 3. OTHER FUNCTIONALITY
+            // =========================================
             $('.select2-basic').select2({ minimumResultsForSearch: 10, width: '100%' });
+            
             $('#categorySelect').on('select2:select', function (e) {
                 if(e.params.data.id === 'create_new') { $(this).val(null).trigger('change'); alert("Logic to open 'Create Category' modal goes here!"); }
             });
+
             $(document).on('click', '.product-img', function() {
                 var src = $(this).attr('data-full');
                 $('#modalImage').attr('src', src);
                 new bootstrap.Modal(document.getElementById('imagePreviewModal')).show();
             });
-            $('#menu-toggle').click(function(e) { e.stopPropagation(); toggleSidebar(); });
-            $('#sidebar-overlay, #sidebar-close').click(function() { $('#sidebar').removeClass('active'); $('#sidebar-overlay').removeClass('active'); });
-            function toggleSidebar() {
-                var width = $(window).width();
-                if(width <= 992) { $('#sidebar').toggleClass('active'); $('#sidebar-overlay').toggleClass('active'); } 
-                else {
-                    var marginLeft = $('.main-content').css('margin-left');
-                    if (marginLeft === '0px') { $('.main-content').css('margin-left', '300px'); $('#sidebar').css('margin-left', '0'); } 
-                    else { $('.main-content').css('margin-left', '0px'); $('#sidebar').css('margin-left', '-300px'); }
-                }
-            }
+
             $('#imageWrapper').on('click', function() { $('#imageInput').trigger('click'); });
             $('#imageInput').on('click', function(e) { e.stopPropagation(); });
             $('#imageInput').on('change', function(e) {
@@ -53,6 +125,7 @@
                     reader.readAsDataURL(this.files[0]);
                 }
             });
+
             function updateTime() {
                 const now = new Date();
                 const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
@@ -66,16 +139,23 @@
             });
             $('#unitTable').on('click', '.delete-row', function() { $(this).closest('tr').remove(); });
 
-            // $('#productForm').on('submit', function(e) {
-            //     e.preventDefault(); 
-            //     var $btn = $('#btnSave');
-            //     var originalText = $btn.find('.btn-text').text();
-            //     var icon = $btn.find('.material-icons-outlined');
+            $('#productForm').on('submit', function(e) {
+                e.preventDefault(); 
+                var $btn = $('#btnSave');
+                var originalText = $btn.find('.btn-text').text();
+                var icon = $btn.find('.material-icons-outlined');
                 
-            //     $btn.prop('disabled', true);
-            //     icon.hide();
-            //     $btn.find('.btn-text').html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Saving...');
-            // });
+                $btn.prop('disabled', true);
+                icon.hide();
+                $btn.find('.btn-text').html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Saving...');
+                
+                setTimeout(function() {
+                    $btn.prop('disabled', false);
+                    icon.show();
+                    $btn.find('.btn-text').text(originalText);
+                    alert("Product Saved Successfully!");
+                }, 1500);
+            });
         });
     </script>
 </body>

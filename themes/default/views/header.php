@@ -12,6 +12,42 @@
     <link href="<?=base_url('assets/jquery/css/datatable.css')?>" rel="stylesheet">
     <script src="<?=base_url('assets/jquery/js/jquery.min.js')?>"></script>
     <script src="<?=base_url('assets/jquery/js/select2.js')?>"></script>
+
+    <style>
+        /* Overlay Logic */
+        .sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1040; /* High z-index */
+            display: none; 
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .sidebar-overlay.active {
+            display: block;
+            opacity: 1;
+        }
+
+        /* Sidebar Z-Index */
+        .sidebar {
+            z-index: 1050; /* Higher than overlay */
+        }
+
+        /* Mobile Close Button */
+        .mobile-close-btn {
+            cursor: pointer;
+            display: none;
+        }
+        @media (max-width: 992px) {
+            .mobile-close-btn {
+                display: block;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -49,28 +85,22 @@
             </li>
 
             <li>
-                <a href="#prodSubmenu" class="nav-link active" data-bs-toggle="collapse" role="button" aria-expanded="true">
+                <a href="#prodSubmenu" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false">
                     <div class="icon-wrapper">
                         <span class="material-icons-outlined">grid_view</span>
                         <span><?=lang('products')?></span>
                     </div>
                     <span class="material-icons-outlined menu-arrow">chevron_right</span>
                 </a>
-                <ul class="sidebar-submenu collapse show" id="prodSubmenu">
+                <ul class="sidebar-submenu collapse" id="prodSubmenu">
                     <li>
-                        <a href="<?=base_url('products')?>" class="active">
+                        <a href="<?=base_url('products')?>">
                             <span class="material-icons-outlined sub-icon">format_list_bulleted</span>
                             <?=lang('list_products')?>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
-                            <span class="material-icons-outlined sub-icon">add</span>
-                            <?=lang('create_product')?>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
+                        <a href="<?=base_url('categories')?>">
                             <span class="material-icons-outlined sub-icon">category</span>
                             <?=lang('categories')?>
                         </a>
