@@ -33,10 +33,8 @@
                 $('#modalImage').attr('src', src);
                 new bootstrap.Modal(document.getElementById('imagePreviewModal')).show();
             });
-
             $('#menu-toggle').click(function(e) { e.stopPropagation(); toggleSidebar(); });
             $('#sidebar-overlay, #sidebar-close').click(function() { $('#sidebar').removeClass('active'); $('#sidebar-overlay').removeClass('active'); });
-
             function toggleSidebar() {
                 var width = $(window).width();
                 if(width <= 992) { $('#sidebar').toggleClass('active'); $('#sidebar-overlay').toggleClass('active'); } 
@@ -46,7 +44,6 @@
                     else { $('.main-content').css('margin-left', '0px'); $('#sidebar').css('margin-left', '-300px'); }
                 }
             }
-
             $('#imageWrapper').on('click', function() { $('#imageInput').trigger('click'); });
             $('#imageInput').on('click', function(e) { e.stopPropagation(); });
             $('#imageInput').on('change', function(e) {
@@ -56,7 +53,6 @@
                     reader.readAsDataURL(this.files[0]);
                 }
             });
-
             function updateTime() {
                 const now = new Date();
                 const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
@@ -70,23 +66,16 @@
             });
             $('#unitTable').on('click', '.delete-row', function() { $(this).closest('tr').remove(); });
 
-            $('#productForm').on('submit', function(e) {
-                e.preventDefault(); 
-                var $btn = $('#btnSave');
-                var originalText = $btn.find('.btn-text').text();
-                var icon = $btn.find('.material-icons-outlined');
+            // $('#productForm').on('submit', function(e) {
+            //     e.preventDefault(); 
+            //     var $btn = $('#btnSave');
+            //     var originalText = $btn.find('.btn-text').text();
+            //     var icon = $btn.find('.material-icons-outlined');
                 
-                $btn.prop('disabled', true);
-                icon.hide();
-                $btn.find('.btn-text').html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Saving...');
-                
-                setTimeout(function() {
-                    $btn.prop('disabled', false);
-                    icon.show();
-                    $btn.find('.btn-text').text(originalText);
-                    alert("Product Saved Successfully!");
-                }, 1500);
-            });
+            //     $btn.prop('disabled', true);
+            //     icon.hide();
+            //     $btn.find('.btn-text').html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Saving...');
+            // });
         });
     </script>
 </body>

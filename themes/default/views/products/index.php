@@ -1,6 +1,5 @@
 <?php (defined('BASEPATH')) or exit('No direct script access allowed'); ?>
 <div class="page-content">
-    
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="fw-bold text-dark m-0"><?=lang('products')?></h5>
         <nav aria-label="breadcrumb">
@@ -24,7 +23,7 @@
             </h6>
         </div>
         
-        <div class="collapse show" id="createFormBody">
+        <div class="collapse show border-bottom" id="createFormBody">
             <div class="card-body p-4">
                 <?php echo form_open_multipart(isset($product->id) ? "products/edit/".$product->id : "products/create"); ?>
                 
@@ -92,7 +91,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-12">
+                    <div class="col-lg-12 mt-1">
                         <div class="form-check form-switch form-switch-md" dir="ltr">
                             <input type="checkbox" class="form-check-input" <?=$product->active==1?'checked':''?> value="1" name="display" id="display">
                             <label class="form-check-label" for="display"><?=lang('display')?></label>
@@ -109,12 +108,6 @@
                 </div>
                 <?php echo form_close(); ?>
             </div>
-        </div>
-    </div>
-
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-white py-2 border-bottom">
-            <h6 class="m-0 fw-bold text-dark" style="font-size: 0.85rem;"><?=lang('list_products')?></h6>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">

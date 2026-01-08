@@ -13,6 +13,7 @@ class Products extends MY_Controller {
         $this->checkRule('product_add', false);
         $this->form_validation->set_rules('name', lang('name'), 'required');
         $this->form_validation->set_rules('code', lang('code'), 'required');
+        $this->form_validation->set_rules('category', lang('category'), 'required');
         if ($this->form_validation->run() == true) {
             $data = [
                 'code'          => $this->input->post('code'),
@@ -21,7 +22,7 @@ class Products extends MY_Controller {
                 'unit_id'       => $this->input->post('unit'),
                 'price'         => $this->input->post('price'),
                 'cost'          => $this->input->post('cost'),
-                'active'        => 1,
+                'active'        => $this->input->post('display'),
                 'created_by'    => $this->session->userdata('user_id'),
                 'image'         => 'no_image.png',
             ];
