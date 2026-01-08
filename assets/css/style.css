@@ -725,3 +725,97 @@ footer {
         position: static;
     }
 }
+/* --- SINGLE CARD LAYOUT --- */
+.card-split-layout .card-body {
+    display: flex;
+    gap: 1.5rem; /* Space between Form and Table */
+    padding: 0; /* Remove default padding to control inner spacing */
+}
+
+.form-panel {
+    width: 300px; /* Fixed width for form */
+    flex-shrink: 0;
+    padding: 1.25rem;
+    background-color: #ffffff;
+    border-right: 1px solid #f1f5f9;
+}
+
+.table-panel {
+    flex-grow: 1;
+    padding: 1.25rem;
+    overflow-x: auto;
+}
+
+/* --- CLEAN TABLE STYLE (Matching Image) --- */
+.table {
+    margin-bottom: 0;
+    width: 100% !important;
+    border-collapse: separate; 
+    border-spacing: 0;
+}
+
+.table thead th {
+    background-color: #f3f4f6; /* Light gray header from image */
+    color: #334155;
+    font-weight: 700;
+    font-size: 0.75rem;
+    padding: 0.8rem 0.75rem;
+    border-bottom: none;
+    text-transform: none; /* Keep Khmer/English case natural */
+}
+
+/* First and Last header rounding for clean look */
+.table thead th:first-child { border-top-left-radius: 6px; border-bottom-left-radius: 6px; }
+.table thead th:last-child { border-top-right-radius: 6px; border-bottom-right-radius: 6px; }
+
+.table tbody td {
+    padding: 0.75rem;
+    border-bottom: 1px solid #f1f5f9;
+    font-size: 0.8rem;
+    color: #475569;
+    vertical-align: middle;
+}
+
+/* STATUS STYLE (Clean Text + Icon) */
+.status-active {
+    color: #10b981; /* Green color */
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.status-active::before {
+    content: 'check_circle';
+    font-family: 'Material Icons Outlined';
+    font-size: 16px;
+}
+
+/* ACTION BUTTON (Green Square) */
+.btn-action-green {
+    background-color: #10b981;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    transition: background 0.2s;
+}
+.btn-action-green:hover {
+    background-color: #059669;
+    color: #fff;
+}
+
+/* Responsive: Stack on mobile */
+@media (max-width: 992px) {
+    .card-split-layout .card-body {
+        flex-direction: column;
+    }
+    .form-panel {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #f1f5f9;
+    }
+}

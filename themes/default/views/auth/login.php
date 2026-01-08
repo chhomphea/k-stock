@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>POS System Login</title>
+    <link rel="shortcut icon" href="<?=base_url('assets/') ?>uploads/icon/icon.jpg"/>
+    <title>POS-LOGIN</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --primary-color: #1e40af; /* Deep Professional Blue */
+            --primary-color: #1e40af;
             --primary-hover: #1e3a8a;
             --text-main: #1e293b;
             --text-muted: #64748b;
             --border-color: #e2e8f0;
             --radius: 6px;
         }
-
         * {
             margin: 0;
             padding: 0;
@@ -324,7 +324,6 @@
         function togglePassword() {
             const passwordInput = document.getElementById('password');
             const btn = document.querySelector('.toggle-password');
-            
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
                 btn.style.color = '#1e40af';
@@ -333,7 +332,6 @@
                 btn.style.color = '#94a3b8';
             }
         }
-
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             const username = document.getElementById('username').value.trim();
             const password = document.getElementById('password').value.trim();
@@ -341,16 +339,13 @@
             const submitBtn = document.getElementById('submitBtn');
             const btnText = submitBtn.querySelector('.btn-text');
             const spinner = submitBtn.querySelector('.spinner');
-
             errorAlert.classList.remove('show');
-
             if (username === '' || password === '') {
                 e.preventDefault();
                 errorAlert.classList.add('show');
                 document.getElementById('error-text').textContent = "Username and password are required.";
                 return;
             }
-
             btnText.textContent = "Verifying...";
             spinner.style.display = "block";
             submitBtn.disabled = true;
