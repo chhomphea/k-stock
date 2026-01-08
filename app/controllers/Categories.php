@@ -63,31 +63,36 @@ class Categories extends MY_Controller {
             $this->session->set_flashdata('message', lang('category_added'));
             redirect('categories');
         } else {
-            $this->data['rowData']    = $this->site->getDataID($id, 'categories');
+            $this->data['category']   = $this->site->getDataID($id, 'categories');
             $this->data['error']      = (validation_errors()?validation_errors() : $this->session->flashdata('error'));
             $bc                       = [['link' => site_url('categories'), 'page' => lang('setup')], ['link' => '#', 'page' => lang('update_category')]];
             $meta                     = ['page_title' => lang('update_category'), 'bc' => $bc];
-            $this->page_construct('categories/edit', $this->data, $meta);
+            $this->page_construct('categories/index', $this->data, $meta);
         }
     }
     public function get_categories() {
-        $actions           =  '<div class="btn-group">
-                                    <button class="btn btn-success btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="las la-list-ul"></i>
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" href="'.site_url('categories/edit/$1').'">
-                                            <i class="fa fa-edit text-primary"></i> '.lang('update').'
-                                        </a>
-                                        <a class="dropdown-item delete-confirm" href="'.site_url('bracategoriesnches/delete/$1').'">
-                                            <i class="fa fa-trash text-danger"></i> '.lang('delete').'
-                                        </a>
-                                    </div>
-                                </div>';
+        $actions = '<div class="dropdown">
+                        <button class="action-btn d-inline-flex align-items-center justify-content-center" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="material-icons-outlined">menu</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li>
+                                <a class="dropdown-item" href="' . site_url('categories/edit/$1') . '">
+                                    ' . lang('edit') . '
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item text-danger delete-confirm" href="' . site_url('categories/delete/$1') . '">
+                                    ' . lang('delete') . '
+                                </a>
+                            </li>
+                        </ul>
+                    </div>';
+
         $this->load->library('datatables');
-        $this->datatables->select('id, image, code, name, display as display,order_display');
+        $this->datatables->select('id, image, code, name, display, order_display');
         $this->datatables->from('categories');
-        $this->datatables->add_column('Actions',$actions, 'id');
+        $this->datatables->add_column('Actions', $actions, 'id');
         $this->datatables->unset_column('id');
         echo $this->datatables->generate();
     }

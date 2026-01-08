@@ -1,6 +1,5 @@
 <?php (defined('BASEPATH')) or exit('No direct script access allowed'); ?>
 <div class="page-content">
-    
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h5 class="fw-bold text-dark m-0"><?=lang('products')?></h5>
         <nav aria-label="breadcrumb">
@@ -24,7 +23,7 @@
             </h6>
         </div>
         
-        <div class="collapse show" id="createFormBody">
+        <div class="collapse show border-bottom" id="createFormBody">
             <div class="card-body p-4">
                 <?php echo form_open_multipart(isset($product->id) ? "products/edit/".$product->id : "products/create"); ?>
                 
@@ -33,11 +32,11 @@
                     <div class="col-lg-9 pe-lg-4 border-end-lg">
                         
                         <div class="row g-3 mb-3">
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <label class="form-label"><?= lang('code', 'code'); ?> <span class="text-danger">*</span></label>
-                                <?= form_input('code',$product->code, 'class="form-control font-mono fw-bold" id="code" placeholder="P-001"'); ?>
+                                <?= form_input('code',$product->code, 'class="form-control font-mono" id="code" placeholder="P-001"'); ?>
                             </div>
-                            <div class="col-md-9">
+                            <div class="col-md-6">
                                 <label class="form-label"><?= lang('name', 'name'); ?> <span class="text-danger">*</span></label>
                                 <?= form_input('name', $product->name, 'class="form-control" id="name" placeholder="Enter product name"'); ?>
                             </div>
@@ -92,8 +91,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-12">
-                        <div class="d-flex justify-content-start gap-2 mt-4 pt-2">
+                    <div class="col-lg-12 mt-1">
+                        <div class="form-check form-switch form-switch-md" dir="ltr">
+                            <input type="checkbox" class="form-check-input" <?=$product->active==1?'checked':''?> value="1" name="display" id="display">
+                            <label class="form-check-label" for="display"><?=lang('display')?></label>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 mt-1">
+                        <div class="d-flex justify-content-start gap-2 mt-1 pt-2">
                             <button type="submit" class="btn btn-primary px-4 shadow-sm" id="btnSave">
                                 <span class="material-icons-outlined align-middle fs-6 me-1">save</span> <?=lang('save')?>
                             </button>
@@ -103,12 +108,6 @@
                 </div>
                 <?php echo form_close(); ?>
             </div>
-        </div>
-    </div>
-
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-white py-2 border-bottom">
-            <h6 class="m-0 fw-bold text-dark" style="font-size: 0.85rem;"><?=lang('list_products')?></h6>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
@@ -163,8 +162,8 @@ $(document).ready(function() {
             { data: "price", className: "text-success fw-bold font-mono small" },
             { data: "created_at", className: "small text-muted" },
             { data: "created_by", className: "small" },
-            { data: "active", className: "text-center" },
-            { data: "Actions", searchable: false, orderable: false, className: "text-end pe-3" }
+            { data: "active", className: "text-center", "render":Active },
+            { data: "Actions", searchable: false, orderable: false, className: "text-center pe-3" }
         ],
         language: { search: "", searchPlaceholder: "Search..." }
     });

@@ -1,56 +1,207 @@
 <?php (defined('BASEPATH')) or exit('No direct script access allowed'); ?>
+
+<div class="page-content">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-dark m-0"><?=lang('list_categories')?></h5>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0 text-muted small">
+                <li class="breadcrumb-item">
+                    <a href="#" class="text-decoration-none text-muted">
+                        <span class="material-icons-outlined align-middle fs-6">dashboard</span>
+                        <?=lang('dashboard')?>
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page"><?=lang('list_categories')?></li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-2 border-bottom clickable-header" data-bs-toggle="collapse" href="#createFormBody" role="button" aria-expanded="true" aria-controls="createFormBody" style="cursor: pointer;">
+            <h6 class="m-0 fw-bold text-primary" style="font-size: 0.85rem;">
+                <span class="material-icons-outlined align-middle me-1 fs-6">add_circle_outline</span> 
+                <?= isset($category->id) ? 'Edit Category' : lang('add_category') ?>
+            </h6>
+        </div>
+        
+        <div class="collapse show border-bottom" id="createFormBody">
+            <div class="card-body p-4">
+                <?php echo form_open_multipart(isset($category->id) ? "categories/edit/".$category->id : "categories/create"); ?>
+                
+                <div class="row g-4">
+                    
+                    <div class="col-lg-9 pe-lg-4 border-end-lg">
+                        
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><?= lang('code', 'code'); ?> <span class="text-danger">*</span></label>
+                                <?= form_input('code', isset($category->code) ? $category->code : '', 'class="form-control font-mono" id="code" placeholder="C-001"'); ?>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><?= lang('name', 'name'); ?> <span class="text-danger">*</span></label>
+                                <?= form_input('name', isset($category->name) ? $category->name : '', 'class="form-control" id="name" placeholder="Enter category name"'); ?>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><?= lang('order_display', 'order_display'); ?></label>
+                                <input type="number" name="order_display" class="form-control" id="order_display" placeholder="0" value="<?= isset($category->order_display) ? $category->order_display : '' ?>">
+                            </div>
+                            </div>
+                    </div>
+
+                    <div class="col-lg-3"> 
+                        <div class="sticky-top" style="top: 1rem; z-index: 1;">
+                            <label class="form-label d-block text-center mb-2 fw-bold"><?=lang('image')?></label>
+                            
+                            <div class="image-upload-box mx-auto shadow-sm" id="imageWrapper" onclick="$('#imageInput').click()">
+                                <div id="uploadPlaceholder" class="<?= (isset($category->image) && $category->image) ? 'd-none' : 'd-flex' ?> flex-column align-items-center justify-content-center h-100 text-muted">
+                                    <span class="material-icons-outlined fs-2 text-muted">cloud_upload</span>
+                                    <span class="fw-bold mt-1" style="font-size: 0.7rem;">Upload Photo</span>
+                                </div>
+                                <img id="imagePreview" src="<?= (isset($category->image) && $category->image) ? base_url('assets/uploads/').$category->image : '' ?>" class="<?= (isset($category->image) && $category->image) ? 'd-block' : 'd-none' ?> w-100 h-100 object-fit-contain p-1">
+                                <input type="file" id="imageInput" name="userfile" accept="image/*" class="d-none">
+                            </div>
+                            
+                            <div class="text-center mt-2">
+                                <span class="badge bg-light text-muted border">Max 2MB (JPG/PNG)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 mt-1">
+                        <div class="form-check form-switch form-switch-md" dir="ltr">
+                            <?php $activeVal = isset($category->display) ? $category->display : 1; ?>
+                            <input type="checkbox" class="form-check-input" <?= $activeVal==1 ? 'checked' : '' ?> value="1" name="display" id="display">
+                            <label class="form-check-label" for="display"><?=lang('display')?></label>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 mt-1">
+                        <div class="d-flex justify-content-start gap-2 mt-1 pt-2">
+                            <button type="submit" class="btn btn-primary px-4 shadow-sm" id="btnSave">
+                                <span class="material-icons-outlined align-middle fs-6 me-1">save</span> <?=lang('save')?>
+                            </button>
+                            <a href="<?=site_url('categories')?>" class="btn btn-light border px-4">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+                <?php echo form_close(); ?>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table id="catData" class="table table-hover table-sm align-middle mb-0" style="width:100%">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-3" style="width: 45px;"><?=lang('image')?></th>
+                            <th><?=lang('code')?></th>
+                            <th><?=lang('name')?></th>
+                            <th><?=lang('display')?></th>
+                            <th><?=lang('order_display')?></th>
+                            <th class="text-end pe-3" style="width:75px;"><?=lang('actions')?></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Inherit styles from your product page css, adding small specific tweaks if needed */
+    .image-upload-box {
+        width: 100%;
+        max-width: 180px;
+        aspect-ratio: 1/1;
+        border: 2px dashed #e9ecef;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        position: relative;
+        background: #f8f9fa;
+    }
+    .image-upload-box:hover {
+        border-color: var(--bs-primary);
+        background: #fff;
+    }
+</style>
+
 <script type="text/javascript">
 $(document).ready(function() {
+    
+    // Image Preview Logic
+    $('#imageInput').change(function(){
+        if(this.files && this.files[0]){
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imagePreview').attr('src', e.target.result).removeClass('d-none').addClass('d-block');
+                $('#uploadPlaceholder').removeClass('d-flex').addClass('d-none');
+            }
+            reader.readAsDataURL(this.files[0]);
+        }
+    });
+
+    // DataTable Setup
     var table = $('#catData').DataTable({
         processing : true,
         serverSide : true,
-        responsive: false,
-        scrollX: true,
+        responsive: true,
         autoWidth: false,
-        'ajax': {
+        dom: "<'d-flex justify-content-between align-items-center p-3'lf>t<'d-flex justify-content-between align-items-center p-3'ip>",
+        ajax: {
             url: '<?php echo site_url('categories/get_categories');?>',
             type: 'POST',
             data: function(d) {
-                d.<?php echo $this->security->get_csrf_token_name();?> =
-                    "<?php echo $this->security->get_csrf_hash();?>";
+                d.<?php echo $this->security->get_csrf_token_name();?> = "<?php echo $this->security->get_csrf_hash();?>";
             },
             error: function(xhr, error, thrown) {
                 console.error('AJAX error:', error, thrown, xhr.status, xhr.responseText);
-                alert('Failed to load data. Please check the console for details.');
             }
         },
-        "columns": [
-            {
-                "data": "image",
-                "searchable": false,
+        columns: [
+            { 
+                "data": "image", 
+                "searchable": false, 
+                "orderable": false, 
+                "render": dislayImage,
+                "className": "ps-3"
+            },
+            { 
+                "data": "code",
+                "className": "fw-bold text-dark font-mono small"
+            },
+            { 
+                "data": "name",
+                "className": "fw-semibold small"
+            },
+            { 
+                "data": "display", 
+                "render": Active,
+                "className": "small"
+            },
+            { 
+                "data": "order_display",
+                "className": "small text-muted"
+            },
+            { 
+                "data": "Actions", 
+                "searchable": false, 
                 "orderable": false,
-                "render": dislayImage
-            },
-            {
-                "data": "code"
-            },
-            {
-                "data": "name"
-            },
-            {
-                "data": "display",
-                "render": Active
-            },
-            {
-                "data": "order_display"
-            },
-            {
-                "data": "Actions",
-                "searchable": false,
-                "orderable": false
+                "className": "text-center pe-3"
             }
         ],
-        "order": [
+        order: [
             [4, 'asc']
         ],
-        "language": {
-            "emptyTable": "<?php echo lang('no_data_available');?>",
-            "loadingRecords": "<?php echo lang('loading_data_from_server');?>"
+        language: { 
+            search: "", 
+            searchPlaceholder: "Search...",
+            emptyTable: "<?php echo lang('no_data_available');?>",
+            loadingRecords: "<?php echo lang('loading_data_from_server');?>"
         }
     });
     $(window).on('resize', function() {
@@ -58,45 +209,3 @@ $(document).ready(function() {
     });
 });
 </script>
-<style type="text/css">
-td:nth-child(1),td:nth-child(6) {
-    text-align: center !important;
-}
-</style>
-<div class="row">
-    <div class="col-xl-12">
-        <div class="card">
-            <div class="card-header align-items-center d-flex">
-                <p class="card-title mb-0 flex-grow-1"><?=lang('list_categories')?></p>
-                <div class="flex-shrink-0">
-                    <a href="<?=site_url('categories/create')?>">
-                        <button type="button" class="btn btn-soft-secondary btn-sm waves-effect waves-light"><i class="mdi mdi-plus-box"></i></button>
-                    </a>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="live-preview">
-                    <table id="catData" class="table align-middle table-nowrap mb-0">
-                        <thead>
-                            <tr class="active">
-                                <th style="max-width:45px;"><?php echo lang("image");?></th>
-                                <th><?php echo lang('code');?></th>
-                                <th><?php echo lang('name');?></th>
-                                <th><?php echo lang('display');?></th>
-                                <th><?php echo lang('order_display');?></th>
-                                <th style="width:75px;"><?php echo lang('actions');?></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="6" class="dataTables_empty"><?php echo lang('loading_data_from_server');?></td>
-                            </tr>
-                        </tbody>
-                        <tfoot>
-                        </tfoot>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>

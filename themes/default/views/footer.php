@@ -2,7 +2,9 @@
             <div id="liveTime" class="live-clock"></div>
             <div>© 2025 HELPYOU Software. All rights reserved.</div>
         </footer>
-    </div> <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+    </div> 
+
+    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-body p-0 position-relative">
@@ -12,51 +14,107 @@
             </div>
         </div>
     </div>
+
     <script src="<?=base_url('assets/jquery/js/datatable.js')?>"></script>
     <script src="<?=base_url('assets/jquery/js/bootstrap.bundle.min.js')?>"></script>
     <script src="<?=base_url('assets/jquery/js/custom.js')?>"></script>
+    
     <script>
         $(window).on('load', function() {
             setTimeout(function() {
                 $('#pageLoader').addClass('fade-out');
-                setTimeout(function(){ $('#pageLoader').remove(); }, 500);
-            }, 600);
+                setTimeout(function(){ $('#pageLoader').remove(); }, 200);
+            }, 300);
         });
+
         var base_url = "<?=base_url()?>";
+
         $(document).ready(function() {
+            // =========================================
+            // 1. AUTO-ACTIVE MENU LOGIC
+            // =========================================
+            var currentUrl = window.location.href; 
+            
+            // Clean up previous active states
+            $('.sidebar-menu a').removeClass('active');
+            $('.sidebar-submenu').removeClass('show');
+
+            $('.sidebar-menu a').each(function() {
+                var linkUrl = $(this).attr('href');
+
+                // Check if link matches current URL (exact match or submenu match)
+                // Exclude '#' and ensure linkUrl is valid
+                if (linkUrl && linkUrl !== '#' && (currentUrl === linkUrl || (currentUrl.indexOf(linkUrl) !== -1 && linkUrl !== base_url))) {
+                    
+                    // Activate this link
+                    $(this).addClass('active');
+
+                    // If this link is inside a submenu (dropdown)
+                    if ($(this).closest('.sidebar-submenu').length > 0) {
+                        // Open the parent dropdown
+                        $(this).closest('.sidebar-submenu').addClass('show');
+                        // Highlight the parent menu item
+                        $(this).closest('.sidebar-submenu').prev('.nav-link').addClass('active').attr('aria-expanded', 'true');
+                    }
+                }
+            });
+
+            // =========================================
+            // 2. MOBILE SIDEBAR LOGIC (Fixing Close Issue)
+            // =========================================
+            function toggleSidebar() {
+                var width = $(window).width();
+                if(width <= 992) { 
+                    // Mobile
+                    $('#sidebar').toggleClass('active'); 
+                    $('#sidebar-overlay').toggleClass('active'); 
+                } else {
+                    // Desktop
+                    var marginLeft = $('.main-content').css('margin-left');
+                    if (marginLeft === '0px') { 
+                        $('.main-content').css('margin-left', '300px'); 
+                        $('#sidebar').css('margin-left', '0'); 
+                    } else { 
+                        $('.main-content').css('margin-left', '0px'); 
+                        $('#sidebar').css('margin-left', '-300px'); 
+                    }
+                }
+            }
+
+            $('#menu-toggle').click(function(e) { 
+                e.stopPropagation(); 
+                toggleSidebar(); 
+            });
+
+            // Close when clicking X button OR the dark overlay
+            $('#sidebar-close, #sidebar-overlay').on('click', function(e) { 
+                e.preventDefault();
+                $('#sidebar').removeClass('active'); 
+                $('#sidebar-overlay').removeClass('active'); 
+            });
+            
+            // Auto-close sidebar on mobile when a link is clicked
+            $('.sidebar-menu a').on('click', function() {
+                if ($(window).width() <= 992) {
+                    $('#sidebar').removeClass('active');
+                    $('#sidebar-overlay').removeClass('active');
+                }
+            });
+
+            // =========================================
+            // 3. OTHER FUNCTIONALITY
+            // =========================================
             $('.select2-basic').select2({ minimumResultsForSearch: 10, width: '100%' });
+            
             $('#categorySelect').on('select2:select', function (e) {
                 if(e.params.data.id === 'create_new') { $(this).val(null).trigger('change'); alert("Logic to open 'Create Category' modal goes here!"); }
             });
 
-            $('#productsTable').DataTable({
-                "language": {
-                    "search": "", "searchPlaceholder": "Search products...",
-                    "paginate": { "previous": "<span class='material-icons-outlined' style='font-size:1rem !important'>chevron_left</span>", "next": "<span class='material-icons-outlined' style='font-size:1rem !important'>chevron_right</span>" },
-                    "zeroRecords": `<div class="text-center p-4"><span class="material-icons-outlined text-muted" style="font-size:48px;">inventory_2</span><p class="mb-0 mt-2 text-muted" style="font-size:0.8rem;">No products found.</p></div>`
-                },
-                "dom": '<"d-flex justify-content-between align-items-center px-3 py-2"f>t<"d-flex justify-content-between align-items-center px-3 py-3"ip>',
-                "columnDefs": [ { "orderable": false, "targets": [0, 1, 7] } ]
-            });
-            
             $(document).on('click', '.product-img', function() {
                 var src = $(this).attr('data-full');
                 $('#modalImage').attr('src', src);
                 new bootstrap.Modal(document.getElementById('imagePreviewModal')).show();
             });
-
-            $('#menu-toggle').click(function(e) { e.stopPropagation(); toggleSidebar(); });
-            $('#sidebar-overlay, #sidebar-close').click(function() { $('#sidebar').removeClass('active'); $('#sidebar-overlay').removeClass('active'); });
-
-            function toggleSidebar() {
-                var width = $(window).width();
-                if(width <= 992) { $('#sidebar').toggleClass('active'); $('#sidebar-overlay').toggleClass('active'); } 
-                else {
-                    var marginLeft = $('.main-content').css('margin-left');
-                    if (marginLeft === '0px') { $('.main-content').css('margin-left', '280px'); $('#sidebar').css('margin-left', '0'); } 
-                    else { $('.main-content').css('margin-left', '0px'); $('#sidebar').css('margin-left', '-280px'); }
-                }
-            }
 
             $('#imageWrapper').on('click', function() { $('#imageInput').trigger('click'); });
             $('#imageInput').on('click', function(e) { e.stopPropagation(); });
