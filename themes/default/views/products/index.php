@@ -72,13 +72,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="d-flex justify-content-start gap-2 mt-4 pt-2">
-                            <button type="submit" class="btn btn-primary px-4 shadow-sm" id="btnSave">
-                                <span class="material-icons-outlined align-middle fs-6 me-1">save</span> <?=lang('save')?>
-                            </button>
-                            <button type="button" class="btn btn-light border px-4">Cancel</button>
-                        </div>
                     </div>
 
                     <div class="col-lg-3"> 
@@ -99,7 +92,14 @@
                             </div>
                         </div>
                     </div>
-
+                    <div class="col-lg-12">
+                        <div class="d-flex justify-content-start gap-2 mt-4 pt-2">
+                            <button type="submit" class="btn btn-primary px-4 shadow-sm" id="btnSave">
+                                <span class="material-icons-outlined align-middle fs-6 me-1">save</span> <?=lang('save')?>
+                            </button>
+                            <button type="button" class="btn btn-light border px-4">Cancel</button>
+                        </div>
+                    </div>
                 </div>
                 <?php echo form_close(); ?>
             </div>
