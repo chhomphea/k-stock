@@ -108,7 +108,7 @@ body {
 }
 
 .sidebar-menu {
-    padding: 0.75rem 0;
+    padding: 0 0 0.75rem  0px;
     list-style: none;
     margin: 0;
 }
@@ -290,13 +290,13 @@ footer {
 .card-header {
     background: #ffffff;
     border-bottom: 1px solid #f1f5f9;
-    padding: 0.75rem 1rem;
+    padding: 1rem 1.25rem !important;
     border-top-left-radius: 6px !important;
     border-top-right-radius: 6px !important;
 }
 
 .card-body {
-    padding: 1rem;
+    padding: 1.25rem !important;
 }
 
 .form-section-title {
@@ -413,6 +413,13 @@ footer {
     background-color: #ffffff;
 }
 
+.table.dataTable {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-collapse: collapse !important;
+    width: 100% !important;
+}
+
 .table img.product-img {
     width: 40px;
     height: 35px;
@@ -489,8 +496,15 @@ footer {
     pointer-events: none;
 }
 
+.dataTables_wrapper .row:first-child {
+    margin-bottom: 0.5rem !important;
+    margin-top: 0 !important;
+}
+
 .dataTables_wrapper .dataTables_filter {
     text-align: left !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 .dataTables_wrapper .dataTables_filter input {
@@ -502,10 +516,13 @@ footer {
     font-size: 0.8rem;
     height: 35px !important;
     padding-left: 28px !important;
+    margin-right: 0 !important;
 }
 
 .dataTables_wrapper .dataTables_length {
     text-align: right !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
 }
 
 .dataTables_wrapper .dataTables_length select {
@@ -648,6 +665,18 @@ footer {
     backdrop-filter: blur(2px);
 }
 
+.productData_wrapper {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 1rem;
+    align-items: start;
+}
+
+.productData_wrapper > .card:first-child {
+    position: sticky;
+    top: 1rem;
+}
+
 @media (min-width: 992px) {
     .border-end-lg {
         border-right: 1px solid #f1f5f9 !important;
@@ -687,63 +716,11 @@ footer {
     .page-content {
         padding: 0.75rem;
     }
-}
-/* --- FIX: UNIFY PADDING FOR FORM AND LIST --- */
 
-/* 1. Ensure consistent Card Body padding for both Form and List */
-.card-body {
-    padding: 1.25rem !important; /* Standard padding for all cards */
-}
-
-/* 2. Remove extra whitespace above the DataTable Search/Length controls */
-.dataTables_wrapper .row:first-child {
-    margin-bottom: 0.5rem !important; /* Reduce gap between Search and Table */
-    margin-top: 0 !important;
-}
-
-/* 3. Align the Table controls (Search/Show) to match Form margins */
-.dataTables_wrapper .dataTables_filter,
-.dataTables_wrapper .dataTables_length {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-}
-
-/* 4. Fix the Table width to match the form content width exactly */
-.table.dataTable {
-    margin-top: 0 !important;
-    margin-bottom: 0 !important;
-    border-collapse: collapse !important; /* Removes slight gaps between cells */
-    width: 100% !important;
-}
-
-/* 5. (Optional) If your List Title "បញ្ជីទំនិញ" is inside a card-header */
-.card-header {
-    padding: 1rem 1.25rem !important; /* Match horizontal padding of card-body */
-    border-bottom: 1px solid #f1f5f9;
-}
-
-/* 6. Fix alignment of the Search Input to be flush right without extra gap */
-.dataTables_wrapper .dataTables_filter input {
-    margin-right: 0 !important;
-}
-.productData_wrapper {
-    display: grid;
-    grid-template-columns: 320px 1fr; /* 320px for Form, Rest for List */
-    gap: 1rem;
-    align-items: start;
-}
-
-/* Optional: Make the Form Sticky so it stays visible while scrolling the list */
-.productData_wrapper > .card:first-child {
-    position: sticky;
-    top: 1rem;
-}
-
-/* Responsive: Stack them on tablets/mobile */
-@media (max-width: 992px) {
     .productData_wrapper {
         grid-template-columns: 1fr;
     }
+
     .productData_wrapper > .card:first-child {
         position: static;
     }
