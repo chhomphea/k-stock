@@ -13,12 +13,12 @@ class Auth extends MY_Controller {
         $folder         = 'app/language/';
         $languagefiles  = scandir($folder);
         if (in_array($lang, $languagefiles)) {
-            $cookie = [
-                'name'   => 'language',
-                'value'  => $lang,
-                'expire' => '31536000',
-                'prefix' => 'spos_',
-                'secure' => false,
+            $cookie         = [
+                'name'      => 'language',
+                'value'     => $lang,
+                'expire'    => '31536000',
+                'prefix'    => 'spos_',
+                'secure'    => false,
             ];
             $this->input->set_cookie($cookie);
         }

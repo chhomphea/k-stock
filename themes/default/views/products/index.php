@@ -1,173 +1,172 @@
 <?php (defined('BASEPATH')) or exit('No direct script access allowed'); ?>
 <div class="page-content">
-    <div class="breadcrumb-area">
-        <h5><?=lang('products')?></h5>
+    
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold text-dark m-0"><?=lang('products')?></h5>
         <nav aria-label="breadcrumb">
-            <ol class="breadcrumb m-0">
-                <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted" style="font-size:0.75rem;"><?=lang('dashboard')?></a></li>
-                <li class="breadcrumb-item active" aria-current="page" style="font-size:0.75rem;"><?=lang('products')?></li>
+            <ol class="breadcrumb m-0 text-muted small">
+                <li class="breadcrumb-item">
+                    <a href="#" class="text-decoration-none text-muted">
+                        <span class="material-icons-outlined align-middle fs-6">dashboard</span>
+                        <?=lang('dashboard')?>
+                    </a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page"><?=lang('products')?></li>
             </ol>
         </nav>
     </div>
-    <div class="card card-highlight">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h6 class="m-0 fw-bold text-dark" style="font-size:0.8rem;">
-                <span class="material-icons-outlined align-middle me-1" style="color: var(--theme-color);">add_circle</span> 
-                <?=lang('create_product')?>
+
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-2 border-bottom">
+            <h6 class="m-0 fw-bold text-primary" style="font-size: 0.85rem;">
+                <span class="material-icons-outlined align-middle me-1 fs-6">add_circle_outline</span> 
+                <?= isset($product->id) ? 'Edit Product' : lang('create_product') ?>
             </h6>
         </div>
         
         <div class="collapse show" id="createFormBody">
-            <div class="card-body">
+            <div class="card-body p-4">
                 <?php echo form_open_multipart(isset($product->id) ? "products/edit/".$product->id : "products/create"); ?>
-                    <div class="row g-0">
-                        <div class="col-md-6 pe-md-3 d-flex flex-column">
-                            <div class="form-group mb-3">
-                                <?= lang('code', 'code'); ?> <span class="text-danger">*</span>
-                                <?= form_input('code',$product->code, 'class="form-control font-mono" id="code" placeholder="P-001"'); ?>
+                
+                <div class="row g-4">
+                    
+                    <div class="col-lg-9 pe-lg-4 border-end-lg">
+                        
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-3">
+                                <label class="form-label"><?= lang('code', 'code'); ?> <span class="text-danger">*</span></label>
+                                <?= form_input('code',$product->code, 'class="form-control font-mono fw-bold" id="code" placeholder="P-001"'); ?>
                             </div>
-                            <div class="form-group mb-3">
-                                <?= lang('name', 'name'); ?> <span class="text-danger">*</span>
-                                <?= form_input('name', $product->name, 'class="form-control" id="name" placeholder="Product name"'); ?>
-                            </div>
-                            <div class="form-group mb-3">
-                                <?= lang('category', 'categorySelect'); ?>
-                                <?php 
-                                    $catArr[''] = lang('please_select');
-                                    foreach ($categories as $key => $cate) {
-                                        $catArr[$cate->id] = $cate->name;
-                                    }
-                                ?>
-                                <?= form_dropdown('category', $catArr, $product->category_id, 'class="form-select select2-basic" id="categorySelect" style="width:100%;"'); ?>
-                            </div>
-                            <div class="form-group mb-3">
-                                <?= lang('unit', 'unit'); ?>
-                                <?php 
-                                    $unitArr[''] = lang('please_select');
-                                    foreach ($units as $key => $u) {
-                                        $unitArr[$u->id] = $u->name;
-                                    }
-                                ?>
-                                <?= form_dropdown('unit', $unitArr, $product->unit_id, 'class="form-select w-100 select2-basic" id="unit" style="width:100%;"'); ?>
-                            </div>
-                            <div class="form-group mb-3">
-                                <?= lang('cost', 'cost'); ?> <span class="text-danger">*</span>
-                                <?= form_input('cost', $product->cost, 'class="form-control" id="cost" placeholder="Product cost"'); ?>
-                            </div>
-                            <div class="form-group mb-3">
-                                <?= lang('price', 'price'); ?> <span class="text-danger">*</span>
-                                <?= form_input('price', $product->price, 'class="form-control" id="price" placeholder="Product price"'); ?>
+                            <div class="col-md-9">
+                                <label class="form-label"><?= lang('name', 'name'); ?> <span class="text-danger">*</span></label>
+                                <?= form_input('name', $product->name, 'class="form-control" id="name" placeholder="Enter product name"'); ?>
                             </div>
                         </div>
-                    </div>
-                    <div class="row g-0">
-                        <div class="col-md-3 ps-md-0 d-flex flex-column">
-                            <label class="form-label w-100 text-start"><?=lang('image')?></label>
-                            <div class="image-upload-wrapper" id="imageWrapper">
-                                <div class="upload-placeholder text-center" id="uploadPlaceholder" style="display: <?=$product?'none':''?>">
-                                    <i class="material-icons-outlined text-muted" style="font-size: 1.5rem;">cloud_upload</i>
-                                    <span class="d-block text-muted mt-1" style="font-size:0.65rem;">Click to Upload</span>
+
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><?= lang('category', 'categorySelect'); ?></label>
+                                <?php $catArr[''] = lang('please_select'); foreach ($categories as $key => $cate) { $catArr[$cate->id] = $cate->name; } ?>
+                                <?= form_dropdown('category', $catArr, $product->category_id, 'class="form-select select2-basic w-100" id="categorySelect"'); ?>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label"><?= lang('unit', 'unit'); ?></label>
+                                <?php $unitArr[''] = lang('please_select'); foreach ($units as $key => $u) { $unitArr[$u->id] = $u->name; } ?>
+                                <?= form_dropdown('unit', $unitArr, $product->unit_id, 'class="form-select select2-basic w-100" id="unit"'); ?>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label"><?= lang('cost', 'cost'); ?> <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light text-muted border-end-0">$</span>
+                                    <?= form_input('cost', $product->cost, 'class="form-control border-start-0" id="cost" placeholder="0.00"'); ?>
                                 </div>
-                                <img id="imagePreview" src="<?=base_url('assets/uploads/').$product->image?>" alt="Preview" style="display: <?=$product?'':'none'?>">
-                                <input type="file" id="imageInput" name="userfile" accept="image/*" style="display: none;">
                             </div>
-                            <div class="text-center text-muted mb-1" style="font-size: 0.65rem;">PNG, JPG – Max 2MB</div>
+                            <div class="col-md-6">
+                                <label class="form-label"><?= lang('price', 'price'); ?> <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light text-muted border-end-0">$</span>
+                                    <?= form_input('price', $product->price, 'class="form-control border-start-0" id="price" placeholder="0.00"'); ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-start gap-2 mt-4 pt-2">
+                            <button type="submit" class="btn btn-primary px-4 shadow-sm" id="btnSave">
+                                <span class="material-icons-outlined align-middle fs-6 me-1">save</span> <?=lang('save')?>
+                            </button>
+                            <button type="button" class="btn btn-light border px-4">Cancel</button>
                         </div>
                     </div>
-                    <div class="mt-3 pt-3 border-top d-flex gap-2">
-                        <button type="submit" class="btn btn-save btn-touch" id="btnSave">
-                            <span class="material-icons-outlined me-1">save</span> <span class="btn-text"><?=lang('save')?></span>
-                        </button>
-                        <button type="button" class="btn btn-light btn-touch px-4">
-                            <span class="material-icons-outlined me-1">close</span> Cancel
-                        </button>
+
+                    <div class="col-lg-3"> 
+                        <div class="sticky-top" style="top: 1rem; z-index: 1;">
+                            <label class="form-label d-block text-center mb-2 fw-bold"><?=lang('image')?></label>
+                            
+                            <div class="image-upload-box mx-auto shadow-sm" id="imageWrapper" onclick="$('#imageInput').click()">
+                                <div id="uploadPlaceholder" class="<?= $product ? 'd-none' : 'd-flex' ?> flex-column align-items-center justify-content-center h-100 text-muted">
+                                    <span class="material-icons-outlined fs-2 text-muted">cloud_upload</span>
+                                    <span class="fw-bold mt-1" style="font-size: 0.7rem;">Upload Photo</span>
+                                </div>
+                                <img id="imagePreview" src="<?= $product ? base_url('assets/uploads/').$product->image : '' ?>" class="<?= $product ? 'd-block' : 'd-none' ?> w-100 h-100 object-fit-contain p-1">
+                                <input type="file" id="imageInput" name="userfile" accept="image/*" class="d-none">
+                            </div>
+                            
+                            <div class="text-center mt-2">
+                                <span class="badge bg-light text-muted border">Max 2MB (JPG/PNG)</span>
+                            </div>
+                        </div>
                     </div>
+
+                </div>
                 <?php echo form_close(); ?>
             </div>
         </div>
     </div>
-    <div class="card">
-        <div class="card-header bg-white border-bottom-0 pt-3 pb-2">
-            <div class="d-flex justify-content-between align-items-center">
-                <h6 class="m-0 fw-bold text-dark" style="font-size:0.8rem;"><?=lang('list_products')?></h6>
-            </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-2 border-bottom">
+            <h6 class="m-0 fw-bold text-dark" style="font-size: 0.85rem;"><?=lang('list_products')?></h6>
         </div>
         <div class="card-body p-0">
             <div class="table-responsive">
-                <table id="productData" class="table table-hover align-middle mb-0" style="width:100%">
-                    <thead>
+                <table id="productData" class="table table-hover table-sm align-middle mb-0" style="width:100%">
+                    <thead class="bg-light">
                         <tr>
-                            <th style="max-width:45px;"><?php echo lang("image"); ?></th>
-                            <th><?php echo lang('code'); ?></th>
-                            <th><?php echo lang('name'); ?></th>
-                            <th><?php echo lang('category'); ?></th>
-                            <th><?php echo lang('unit'); ?></th>
-                            <th><?php echo lang('price'); ?></th>
-                            <th><?php echo lang('created_at'); ?></th>
-                            <th><?php echo lang('created_by'); ?></th>
-                            <th><?php echo lang('display'); ?></th>
-                            <th class="text-end" style="width:40px;"><?php echo lang('actions'); ?></th>
+                            <th class="ps-3" style="width: 40px;"><?=lang('image')?></th>
+                            <th><?=lang('code')?></th>
+                            <th><?=lang('name')?></th>
+                            <th><?=lang('category')?></th>
+                            <th><?=lang('unit')?></th>
+                            <th><?=lang('price')?></th>
+                            <th><?=lang('created_at')?></th>
+                            <th><?=lang('created_by')?></th>
+                            <th><?=lang('display')?></th>
+                            <th class="text-end pe-3"><?=lang('actions')?></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="10" class="dataTables_empty text-center p-4">
-                                <?php echo lang('loading_data_from_server'); ?>
-                            </td>
-                        </tr>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
     </div>
-</div> 
+</div>
+
 <script type="text/javascript">
 $(document).ready(function() {
-    var table = $('#productData').DataTable({
-        processing: true,
-        serverSide: true,
-        responsive: true,
-        scrollX: true,
-        autoWidth: false,
-        "dom": '<"d-flex justify-content-between align-items-center px-3 py-2"lf>t<"d-flex justify-content-between align-items-center px-3 py-3"ip>',
-        'ajax': {
-            url: '<?php echo site_url('products/get_products'); ?>',
-            type: 'POST',
-            data: function(d) {
-                d.<?php echo $this->security->get_csrf_token_name(); ?> = "<?php echo $this->security->get_csrf_hash(); ?>";
-            },
-            error: function(xhr, error, thrown) {
-                console.error('AJAX error:', error, thrown, xhr.status, xhr.responseText);
-                alert('Failed to load data. Please check the console for details.');
+    $('#imageInput').change(function(){
+        if(this.files && this.files[0]){
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#imagePreview').attr('src', e.target.result).removeClass('d-none').addClass('d-block');
+                $('#uploadPlaceholder').removeClass('d-flex').addClass('d-none');
             }
-        },
-        "columns": [
-            { "data": "image", "searchable": false, "orderable": false, "render": dislayImage },
-            { "data": "code" },
-            { "data": "name", "className": "fw-semibold" },
-            { "data": "category" },
-            { "data": "unit" },
-            { "data": "price", "className": "font-mono fw-bold" },
-            { "data": "created_at" },
-            { "data": "created_by", "searchable": false },
-            { "data": "active", "render": Active, "className": "text-center" },
-            { "data": "Actions", "searchable": false, "orderable": false, "className": "text-center align-middle" }
-        ],
-        "order": [[1, 'asc']],
-        "language": {
-            "emptyTable": "<?php echo lang('no_data_available'); ?>",
-            "loadingRecords": "<?php echo lang('loading_data_from_server'); ?>",
-            "search": "", 
-            "searchPlaceholder": "Search products...",
-            "paginate": {
-                "previous": "<span class='material-icons-outlined' style='font-size:1rem !important'>chevron_left</span>",
-                "next": "<span class='material-icons-outlined' style='font-size:1rem !important'>chevron_right</span>"
-            },
-            "zeroRecords": `<div class="text-center p-4"><span class="material-icons-outlined text-muted" style="font-size:48px;">inventory_2</span><p class="mb-0 mt-2 text-muted" style="font-size:0.8rem;">No data found.</p></div>`
+            reader.readAsDataURL(this.files[0]);
         }
     });
-    $(window).on('resize', function() {
-        table.columns.adjust();
+
+    var table = $('#productData').DataTable({
+        processing: true, serverSide: true, responsive: true, autoWidth: false,
+        dom: "<'d-flex justify-content-between align-items-center p-3'lf>t<'d-flex justify-content-between align-items-center p-3'ip>",
+        ajax: {
+            url: '<?php echo site_url('products/get_products'); ?>', type: 'POST',
+            data: function(d) { d.<?php echo $this->security->get_csrf_token_name(); ?> = "<?php echo $this->security->get_csrf_hash(); ?>"; }
+        },
+        columns: [
+            { "data": "image", "searchable": false, "orderable": false, "render": dislayImage },
+            { data: "code", className: "fw-bold text-dark font-mono small" },
+            { data: "name", className: "fw-semibold small" },
+            { data: "category", className: "small" },
+            { data: "unit", className: "small" },
+            { data: "price", className: "text-success fw-bold font-mono small" },
+            { data: "created_at", className: "small text-muted" },
+            { data: "created_by", className: "small" },
+            { data: "active", className: "text-center" },
+            { data: "Actions", searchable: false, orderable: false, className: "text-end pe-3" }
+        ],
+        language: { search: "", searchPlaceholder: "Search..." }
     });
 });
 </script>

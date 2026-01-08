@@ -9,7 +9,7 @@
 	box-sizing:border-box;
 	cursor:pointer;
 	display:block;
-	height:32px !important;
+	height:35px !important;
 	user-select:none;
 	-webkit-user-select:none
 }
@@ -34,7 +34,7 @@
 	box-sizing:border-box;
 	cursor:pointer;
 	display:block;
-	min-height:32px;
+	min-height:35px;
 	user-select:none;
 	-webkit-user-select:none
 }
@@ -157,7 +157,7 @@
 }
 .select2-container--default .select2-selection--single .select2-selection__rendered{
 	color:#444;
-	line-height:32px !important
+	line-height:35px !important
 }
 .select2-container--default .select2-selection--single .select2-selection__clear{
 	cursor:pointer;
