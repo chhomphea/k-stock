@@ -1,6 +1,6 @@
 :root {
-    --theme-color: #1A5276;
-    --theme-dark: #154360;
+    --theme-color: #0b2c40;
+    --theme-dark:#0e334b;
     --theme-accent: #5DADE2;
     --bg-sidebar: var(--theme-color);
     --text-sidebar: #D6EAF8;
@@ -25,13 +25,13 @@ html {
 }
 
 body {
-    font-family: 'font-englisht', 'font-khmer', sans-serif;
+    font-family: 'Roboto', 'font-khmer', sans-serif;
     line-height: 1.5;
     height: 100%;
     overflow: hidden;
     background-color: #f3f4f6;
     color: #334155;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
 
 * {
@@ -123,7 +123,7 @@ body {
     font-weight: 500;
     border-left: 1px solid transparent;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     transition: all 0.2s;
 }
 
@@ -323,7 +323,7 @@ footer {
 .input-group-text {
     height: 35px !important;
     padding: 0.4rem 0.85rem;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     border: 1px solid #e2e8f0;
     border-radius: 4px;
     background-color: #fff;
@@ -352,7 +352,7 @@ footer {
     color: #334155 !important;
     line-height: 35px !important;
     padding-left: 0.85rem !important;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {

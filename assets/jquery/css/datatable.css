@@ -3,7 +3,7 @@
    ========================================= */
 
 /* Wrapper layout */
-.dataTables_wrapper { position: relative; clear: both; font-size: 0.75rem; }
+.dataTables_wrapper { position: relative; clear: both; font-size: 0.8rem; }
 
 /* Length & Filter Positioning */
 .dataTables_wrapper .dataTables_length { float: left; margin-bottom: 0.5rem; }
@@ -16,7 +16,7 @@
     border-radius: 4px;
     padding: 0.35rem 0.5rem;
     height: 32px;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: var(--text-body);
     background-color: #fff;
     outline: none;
@@ -63,7 +63,7 @@ table.dataTable thead th {
     background-color: #f8fafc;
     color: #64748b;
     font-weight: 700;
-    font-size: 0.7rem;
+    font-size: 0.75rem;
     text-transform: uppercase;
     padding: 0.75rem 0.5rem;
     padding-right: 2.5rem !important; /* Space for arrow */
@@ -118,7 +118,7 @@ table.dataTable tbody td {
     border-bottom: 1px solid #f1f5f9;
     vertical-align: middle;
     color: var(--text-body);
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     background-color: #fff;
 }
 table.dataTable tbody tr:hover td {
@@ -154,7 +154,7 @@ table.dataTable tbody tr:hover td {
     border-radius: 4px;
     background: #fff !important;
     color: var(--text-body) !important;
-    font-size: 0.7rem; /* Slightly smaller text */
+    font-size: 0.75rem; /* Slightly smaller text */
     cursor: pointer;
     text-decoration: none;
     user-select: none;

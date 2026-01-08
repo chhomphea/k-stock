@@ -1,52 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PMS-HELP</title>
-    <link rel="shortcut icon" href="<?=base_url('assets/') ?>uploads/icon/icon.jpg"/>
-    <link href="<?=base_url('assets/jquery/css/bootstrap.min.css')?>" rel="stylesheet">
-    <link href="<?=base_url('assets/css/font.css')?>" rel="stylesheet">
-    <link href="<?=base_url('assets/css/style.css')?>" rel="stylesheet">
-    <link href="<?=base_url('assets/css/select2.css')?>" rel="stylesheet">
-    <link href="<?=base_url('assets/jquery/css/datatable.css')?>" rel="stylesheet">
-    <script src="<?=base_url('assets/jquery/js/jquery.min.js')?>"></script>
-    <script src="<?=base_url('assets/jquery/js/select2.js')?>"></script>
+    <link rel="shortcut icon" href="<?php echo base_url('assets/')?>uploads/icon/icon.jpg" />
+    <link href="<?php echo base_url('assets/jquery/css/bootstrap.min.css')?>" rel="stylesheet">
+    <link href="<?php echo base_url('assets/css/font.css')?>" rel="stylesheet">
+    <link href="<?php echo base_url('assets/css/style.css')?>" rel="stylesheet">
+    <link href="<?php echo base_url('assets/css/select2.css')?>" rel="stylesheet">
+    <link href="<?php echo base_url('assets/jquery/css/datatable.css')?>" rel="stylesheet">
+    <script src="<?php echo base_url('assets/jquery/js/jquery.min.js')?>"></script>
+    <script src="<?php echo base_url('assets/jquery/js/select2.js')?>"></script>
 
     <style>
-        /* Overlay Logic */
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1040; /* High z-index */
-            display: none; 
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        .sidebar-overlay.active {
-            display: block;
-            opacity: 1;
-        }
+    /* Overlay Logic */
+    .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+        /* High z-index */
+        display: none;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
 
-        /* Sidebar Z-Index */
-        .sidebar {
-            z-index: 1050; /* Higher than overlay */
-        }
+    .sidebar-overlay.active {
+        display: block;
+        opacity: 1;
+    }
 
-        /* Mobile Close Button */
+    /* Sidebar Z-Index */
+    .sidebar {
+        z-index: 1050;
+        /* Higher than overlay */
+    }
+
+    /* Mobile Close Button */
+    .mobile-close-btn {
+        cursor: pointer;
+        display: none;
+    }
+
+    @media (max-width: 992px) {
         .mobile-close-btn {
-            cursor: pointer;
-            display: none;
+            display: block;
         }
-        @media (max-width: 992px) {
-            .mobile-close-btn {
-                display: block;
-            }
-        }
+    }
     </style>
 </head>
 
@@ -66,8 +71,10 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <div class="d-flex align-items-center">
-                <div class="text-white rounded p-1 me-2 d-flex align-items-center justify-content-center" style="width:24px; height:24px; background-color: var(--theme-color);">
-                    <span class="material-icons-outlined" style="font-size:16px !important; color:#fff !important;">inventory_2</span>
+                <div class="text-white rounded p-1 me-2 d-flex align-items-center justify-content-center"
+                    style="width:24px; height:24px; background-color: var(--theme-color);">
+                    <span class="material-icons-outlined"
+                        style="font-size:16px !important; color:#fff !important;">inventory_2</span>
                 </div>
                 <span>ប្រព័ន្ធគ្រប់គ្រងស្តុក</span>
             </div>
@@ -76,10 +83,10 @@
 
         <ul class="sidebar-menu">
             <li>
-                <a href="<?=base_url()?>" class="nav-link">
+                <a href="<?php echo base_url()?>" class="nav-link">
                     <div class="icon-wrapper">
                         <span class="material-icons-outlined">dashboard</span>
-                        <span><?=lang('dashboard')?></span>
+                        <span><?php echo lang('dashboard')?></span>
                     </div>
                 </a>
             </li>
@@ -88,21 +95,21 @@
                 <a href="#prodSubmenu" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false">
                     <div class="icon-wrapper">
                         <span class="material-icons-outlined">grid_view</span>
-                        <span><?=lang('products')?></span>
+                        <span><?php echo lang('products')?></span>
                     </div>
                     <span class="material-icons-outlined menu-arrow">chevron_right</span>
                 </a>
                 <ul class="sidebar-submenu collapse" id="prodSubmenu">
                     <li>
-                        <a href="<?=base_url('products')?>">
+                        <a href="<?php echo base_url('products')?>">
                             <span class="material-icons-outlined sub-icon">format_list_bulleted</span>
-                            <?=lang('list_products')?>
+                            <?php echo lang('list_products')?>
                         </a>
                     </li>
                     <li>
-                        <a href="<?=base_url('categories')?>">
+                        <a href="<?php echo base_url('categories')?>">
                             <span class="material-icons-outlined sub-icon">category</span>
-                            <?=lang('categories')?>
+                            <?php echo lang('categories')?>
                         </a>
                     </li>
                 </ul>
@@ -112,22 +119,22 @@
                 <a href="#saleSubmenu" class="nav-link" data-bs-toggle="collapse" role="button" aria-expanded="false">
                     <div class="icon-wrapper">
                         <span class="material-icons-outlined">shopping_cart</span>
-                        <span><?=lang('sales')?></span>
+                        <span><?php echo lang('sales')?></span>
                     </div>
                     <span class="material-icons-outlined menu-arrow">chevron_right</span>
                 </a>
-                
+
                 <ul class="sidebar-submenu collapse" id="saleSubmenu">
                     <li>
-                        <a href="<?=base_url('sales')?>">
+                        <a href="<?php echo base_url('sales')?>">
                             <span class="material-icons-outlined sub-icon">format_list_bulleted</span>
-                            <?=lang('list_sales')?>
+                            <?php echo lang('list_sales')?>
                         </a>
                     </li>
                     <li>
                         <a href="#">
                             <span class="material-icons-outlined sub-icon">add</span>
-                            <?=lang('create_sale')?>
+                            <?php echo lang('create_sale')?>
                         </a>
                     </li>
                 </ul>
@@ -137,7 +144,7 @@
                 <a href="#" class="nav-link">
                     <div class="icon-wrapper">
                         <span class="material-icons-outlined">settings</span>
-                        <span><?=lang('settings')?></span>
+                        <span><?php echo lang('settings')?></span>
                     </div>
                 </a>
             </li>
@@ -145,26 +152,30 @@
     </div>
 
     <div class="main-content" id="main-content">
-        
+
         <nav class="topbar">
             <div class="d-flex align-items-center">
                 <button class="material-icons-outlined toggle-btn me-3" id="menu-toggle">menu</button>
             </div>
 
             <div class="d-flex align-items-center gap-3">
-                
+
                 <div class="dropdown">
-                    <a href="#" class="text-decoration-none text-muted fw-bold dropdown-toggle d-flex align-items-center" data-bs-toggle="dropdown">
-                        <?=!$this->input->cookie('spos_language')!='' ? lang('english') : lang($this->input->cookie('spos_language', true))?>
+                    <a href="#"
+                        class="text-decoration-none text-muted fw-bold dropdown-toggle d-flex align-items-center"
+                        data-bs-toggle="dropdown">
+                        <?php echo ! $this->input->cookie('spos_language') != '' ? lang('english') : lang($this->input->cookie('spos_language', true))?>
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a class="dropdown-item <?=$this->input->cookie('spos_language')=='khmer'?'active':''?>" href="<?= site_url('auth/language/khmer') ?>">
+                            <a class="dropdown-item <?php echo $this->input->cookie('spos_language') == 'khmer' ? 'active' : ''?>"
+                                href="<?php echo site_url('auth/language/khmer')?>">
                                 ខ្មែរ
                             </a>
                         </li>
                         <li>
-                            <a class="dropdown-item <?=($this->input->cookie('spos_language')!='khmer')?'active':''?>" href="<?= site_url('auth/language/english') ?>">
+                            <a class="dropdown-item <?php echo ($this->input->cookie('spos_language') != 'khmer') ? 'active' : ''?>"
+                                href="<?php echo site_url('auth/language/english')?>">
                                 English
                             </a>
                         </li>
@@ -174,13 +185,18 @@
                 <div class="border-start mx-1" style="height: 16px;"></div>
 
                 <div class="dropdown">
-                    <a href="#" class="text-decoration-none text-dark dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown">
-                        <img src="<?=base_url('assets/uploads/icon/icon.jpg')?>" class="rounded-circle border" width="28" height="28" alt="user">
-                        <span class="fw-bold" style="font-size:0.8rem;"><?=$this->session->userdata('first_name');?> <?=$this->session->userdata('last_name');?></span>
+                    <a href="#" class="text-decoration-none text-dark dropdown-toggle d-flex align-items-center gap-2"
+                        data-bs-toggle="dropdown">
+                        <img src="<?php echo base_url('assets/uploads/icon/icon.jpg')?>" class="rounded-circle border"
+                            width="28" height="28" alt="user">
+                        <span class="fw-bold" style="font-size:0.8rem;"><?php echo $this->session->userdata('first_name');?>
+                            <?php echo $this->session->userdata('last_name');?></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="#">Profile</a></li>
-                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
                         <li><a class="dropdown-item text-danger" href="#">Logout</a></li>
                     </ul>
                 </div>
