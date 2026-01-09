@@ -1,162 +1,117 @@
-<footer>
-            <div id="liveTime" class="live-clock"></div>
-            <div>© 2025 HELPYOU Software. All rights reserved.</div>
-        </footer>
-    </div> 
+<footer class="main-footer">
+    <div><span class="fw-bold text-dark">POS SYSTEM</span> &copy; 2026</div>
+    <div>Version 5.6</div>
+</footer>
 
-    <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg">
-                <div class="modal-body p-0 position-relative">
-                    <button type="button" class="btn-close position-absolute top-0 end-0 m-2 bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <img src="" id="modalImage" class="img-fluid w-100 rounded" alt="Preview">
-                </div>
-            </div>
-        </div>
-    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <script src="<?=base_url('assets/jquery/js/datatable.js')?>"></script>
-    <script src="<?=base_url('assets/jquery/js/bootstrap.bundle.min.js')?>"></script>
-    <script src="<?=base_url('assets/jquery/js/custom.js')?>"></script>
-    
-    <script>
-        $(window).on('load', function() {
-            setTimeout(function() {
-                $('#pageLoader').addClass('fade-out');
-                setTimeout(function(){ $('#pageLoader').remove(); }, 200);
-            }, 300);
-        });
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-        var base_url = "<?=base_url()?>";
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
-        $(document).ready(function() {
-            // =========================================
-            // 1. AUTO-ACTIVE MENU LOGIC
-            // =========================================
-            var currentUrl = window.location.href; 
-            
-            // Clean up previous active states
-            $('.sidebar-menu a').removeClass('active');
-            $('.sidebar-submenu').removeClass('show');
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 
-            $('.sidebar-menu a').each(function() {
-                var linkUrl = $(this).attr('href');
-
-                // Check if link matches current URL (exact match or submenu match)
-                // Exclude '#' and ensure linkUrl is valid
-                if (linkUrl && linkUrl !== '#' && (currentUrl === linkUrl || (currentUrl.indexOf(linkUrl) !== -1 && linkUrl !== base_url))) {
-                    
-                    // Activate this link
-                    $(this).addClass('active');
-
-                    // If this link is inside a submenu (dropdown)
-                    if ($(this).closest('.sidebar-submenu').length > 0) {
-                        // Open the parent dropdown
-                        $(this).closest('.sidebar-submenu').addClass('show');
-                        // Highlight the parent menu item
-                        $(this).closest('.sidebar-submenu').prev('.nav-link').addClass('active').attr('aria-expanded', 'true');
-                    }
-                }
-            });
-
-            // =========================================
-            // 2. MOBILE SIDEBAR LOGIC (Fixing Close Issue)
-            // =========================================
-            function toggleSidebar() {
-                var width = $(window).width();
-                if(width <= 992) { 
-                    // Mobile
-                    $('#sidebar').toggleClass('active'); 
-                    $('#sidebar-overlay').toggleClass('active'); 
-                } else {
-                    // Desktop
-                    var marginLeft = $('.main-content').css('margin-left');
-                    if (marginLeft === '0px') { 
-                        $('.main-content').css('margin-left', '300px'); 
-                        $('#sidebar').css('margin-left', '0'); 
-                    } else { 
-                        $('.main-content').css('margin-left', '0px'); 
-                        $('#sidebar').css('margin-left', '-300px'); 
-                    }
-                }
+<script>
+    // Page Load Transition
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            var loader = document.getElementById('pageLoader');
+            if (loader) {
+                loader.classList.add('hidden');
+                setTimeout(function() { loader.style.display = 'none'; }, 400);
             }
+        }, 300); 
+    });
 
-            $('#menu-toggle').click(function(e) { 
-                e.stopPropagation(); 
-                toggleSidebar(); 
-            });
+    $(document).ready(function() {
+        // Init Select2
+        if ($('.select2-basic').length > 0) {
+            $('.select2-basic').select2({ width: '100%', minimumResultsForSearch: Infinity }); 
+        }
 
-            // Close when clicking X button OR the dark overlay
-            $('#sidebar-close, #sidebar-overlay').on('click', function(e) { 
-                e.preventDefault();
-                $('#sidebar').removeClass('active'); 
-                $('#sidebar-overlay').removeClass('active'); 
+        // Image Upload Logic
+        const fileInput = $('#imageInput');
+        const uploadBox = $('#uploadBox');
+        
+        if (uploadBox.length) {
+            uploadBox.on('click', function(e) {
+                if (e.target.id === 'imageInput' || $(e.target).closest('#removeImg').length > 0) return;
+                fileInput.trigger('click');
             });
             
-            // Auto-close sidebar on mobile when a link is clicked
-            $('.sidebar-menu a').on('click', function() {
-                if ($(window).width() <= 992) {
-                    $('#sidebar').removeClass('active');
-                    $('#sidebar-overlay').removeClass('active');
-                }
-            });
-
-            // =========================================
-            // 3. OTHER FUNCTIONALITY
-            // =========================================
-            $('.select2-basic').select2({ minimumResultsForSearch: 10, width: '100%' });
+            fileInput.on('click', function(e) { e.stopPropagation(); });
             
-            $('#categorySelect').on('select2:select', function (e) {
-                if(e.params.data.id === 'create_new') { $(this).val(null).trigger('change'); alert("Logic to open 'Create Category' modal goes here!"); }
-            });
-
-            $(document).on('click', '.product-img', function() {
-                var src = $(this).attr('data-full');
-                $('#modalImage').attr('src', src);
-                new bootstrap.Modal(document.getElementById('imagePreviewModal')).show();
-            });
-
-            $('#imageWrapper').on('click', function() { $('#imageInput').trigger('click'); });
-            $('#imageInput').on('click', function(e) { e.stopPropagation(); });
-            $('#imageInput').on('change', function(e) {
-                if (this.files && this.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) { $('#imagePreview').attr('src', e.target.result).show(); $('#uploadPlaceholder').hide(); }
-                    reader.readAsDataURL(this.files[0]);
+            fileInput.on('change', function() {
+                const file = this.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(evt) {
+                        $('#imagePreview').attr('src', evt.target.result).show();
+                        $('.upload-content').hide();
+                        $('#removeImg').css('display', 'flex');
+                    }
+                    reader.readAsDataURL(file);
                 }
             });
-
-            function updateTime() {
-                const now = new Date();
-                const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
-                document.getElementById('liveTime').textContent = now.toLocaleString('en-US', options).replace(',', '');
-            }
-            setInterval(updateTime, 1000); updateTime();
-
-            $('#addUnitBtn').click(function() {
-                var newRow = `<tr><td><select class="form-select border-0 bg-transparent p-0"><option>Can</option><option>Box</option></select></td><td><input type="number" class="form-control border-0 bg-transparent p-0" value="1"></td><td><input type="number" class="form-control border-0 bg-transparent p-0" placeholder="0.00"></td><td><input type="number" class="form-control border-0 bg-transparent p-0 fw-bold" placeholder="0.00"></td><td class="text-center"><button type="button" class="btn-danger-soft rounded border-0 p-1 d-flex align-items-center justify-content-center delete-row" style="width:24px; height:24px;"><span class="material-icons-outlined" style="font-size:14px !important;">delete</span></button></td></tr>`;
-                $('#unitTable tbody').append(newRow);
+            
+            $('#removeImg').on('click', function(e) {
+                e.stopPropagation(); e.preventDefault();
+                fileInput.val('');
+                $('#imagePreview').hide().attr('src', '');
+                $('.upload-content').show();
+                $(this).hide();
             });
-            $('#unitTable').on('click', '.delete-row', function() { $(this).closest('tr').remove(); });
+        }
+    });
 
-            $('#productForm').on('submit', function(e) {
-                e.preventDefault(); 
-                var $btn = $('#btnSave');
-                var originalText = $btn.find('.btn-text').text();
-                var icon = $btn.find('.material-icons-outlined');
-                
-                $btn.prop('disabled', true);
-                icon.hide();
-                $btn.find('.btn-text').html('<span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span> Saving...');
-                
-                setTimeout(function() {
-                    $btn.prop('disabled', false);
-                    icon.show();
-                    $btn.find('.btn-text').text(originalText);
-                    alert("Product Saved Successfully!");
-                }, 1500);
-            });
-        });
-    </script>
+    // Sidebar Toggle Logic
+    function handleSidebarToggle() {
+        if (window.innerWidth >= 992) {
+            $('body').toggleClass('sidebar-closed'); 
+        } else {
+            toggleSidebarMobile(); 
+        }
+    }
+
+    function toggleSidebarMobile() {
+        var sidebar = $('#sidebar');
+        sidebar.toggleClass('active');
+        $('#mobOverlay').toggleClass('show');
+    }
+
+    // Accordion Menu Logic
+    function toggleSubmenu(element) {
+        var $parentLi = $(element).parent();
+        if ($parentLi.hasClass('expanded')) {
+            $parentLi.removeClass('expanded'); 
+        } else {
+            $('.menu-item.expanded').removeClass('expanded'); 
+            $parentLi.addClass('expanded'); 
+        }
+    }
+
+    // Active Link Highlight
+    function activateLink(element) {
+        $('.submenu-link').removeClass('active');
+        $(element).addClass('active');
+    }
+
+    // Save Function with Button Loader
+    function triggerSave() {
+        var $btn = $('#btnSave');
+        var originalContent = $btn.html();
+        $btn.html('<span class="btn-spinner"></span> Saving...').prop('disabled', true);
+
+        setTimeout(function() {
+            $btn.html(originalContent).prop('disabled', false);
+            var toastHTML = `<div class="custom-toast"><span class="material-icons-outlined text-success fs-3 me-3">check_circle</span><div><div class="fw-bold" style="font-size:13px">Success</div><small class="text-muted" style="font-size:11px">Saved successfully</small></div></div>`;
+            $('#toastContainer').append(toastHTML);
+            setTimeout(() => { $('.custom-toast').last().fadeOut(300, function(){ $(this).remove(); }); }, 3000);
+        }, 800);
+    }
+</script>
 </body>
 </html>

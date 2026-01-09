@@ -37,14 +37,14 @@ class Products extends MY_Controller {
             $this->data['error']      = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
             $bc                       = [['link' => site_url('products'), 'page' => lang('setup')], ['link' => '#', 'page' => lang('create_product')]];
             $meta                     = ['page_title' => lang('create_product'), 'bc' => $bc];
-            $this->page_construct('products/index', $this->data, $meta);
+            $this->page_construct('products/create', $this->data, $meta);
         }
     }
     public function delete($id = null) {
         $this->checkRule('category_delete', true);
         if ($this->categories_model->deleteCategory($id)) {
             $this->session->set_flashdata('message', lang('category_deleted'));
-            redirect('categories');
+            redirect('products');
         }
     }
     public function edit($id = null) {
