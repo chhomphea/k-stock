@@ -2,7 +2,7 @@ function dislayImage(n) {
     if (n !== null && n !== '') {
         var imgPath = base_url + 'assets/uploads/thumbs/' + n;
         var fullPath = base_url + 'assets/uploads/' + n;
-        return '<img src="' + imgPath + '" ' +
+        return '<img style="width:32px; height:32px; object-fit:cover; border-radius:4px; border:1px solid #f1f5f9;" src="' + imgPath + '" ' +
                'data-full="' + fullPath + '" ' + 
                'class="product-img" ' + 
                'data-bs-toggle="tooltip" ' + 
@@ -17,9 +17,9 @@ function dislayImage(n) {
 }
 function Active(n) {
     if (n == 1) {
-        return '<span class="badge badge-status-active">Active</span>';
+        return '<span class="badge bg-success-subtle text-success border border-success-subtle">Active</span>';
     } else if (n == 0) {
-        return '<span class="badge badge-status-inactive">Inactive</span>';
+        return '<span class="badge bg-danger-subtle text-danger border border-danger-subtle">Inactive</span>';
     }
     return '';
 }
