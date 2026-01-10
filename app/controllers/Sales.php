@@ -1,197 +1,186 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+
 class Sales extends MY_Controller {
+
     public function __construct() {
         parent::__construct();
-        if (!$this->loggedIn) {
-            redirect('login');
-        }
-        $this->load->library('form_validation');
-        $this->load->model('bookings_model');
+        if (!$this->loggedIn) redirect('login');
+        $this->load->model('sales_model');
+        $this->load->library(['form_validation', 'datatables']);
     }
-    public function create() {
-        $this->checkRule('customer_add', false);
-        $this->form_validation->set_rules('date', lang('date'), 'required');
-        $this->form_validation->set_rules('branch', lang('branches'), 'required');
-        $this->form_validation->set_rules('customer', lang('customer'), 'required');
-        $this->form_validation->set_rules('phone', lang('phone'), 'required');
-        if ($this->form_validation->run() == true) {
-            $countRoom = sizeof($_POST['roomId']);
-            for ($i=0; $i < $countRoom; $i++) { 
-                $rooms[] = array(
-                    'room_id'           => $_POST['roomId'][$i],
-                    'check_in_date'     => $_POST['checkin_date'][$i],
-                    'check_out_date'    => $_POST['check_out_date'][$i],
-                    'monthly_rate'      => $_POST['roomPrice'][$i],
-                    'duration_months'   => $_POST['duration_months'][$i],
-                    'subtotal'          => $_POST['duration_months'][$i] * $_POST['roomPrice'][$i],
-                );
-            }
-            $countProducts = sizeof($_POST['otherFee']);
-            for ($i=0; $i < $countProducts; $i++) { 
-                $bookingProducts[] = array(
-                    'room_id'           => $_POST['service_room'][$i],
-                    'product_id'        => $_POST['otherFee'][$i],
-                    'quantity'          => $_POST['product_quantity'][$i],
-                    'price'             => $_POST['product_price'][$i],
-                    'subtotal'          => $_POST['product_subtotal'][$i],
-                );
-            }
-            $data = [
-                'branch_id'             => $this->input->post('branch'),
-                'name'                  => $this->input->post('customer'),
-                'phone'                 => $this->input->post('phone'),
-                'booking_date'          => $this->input->post('date'),
-                'deposit'               => $this->input->post('deposit'),
-                'image'                 => 'no_image.png',
-            ];
-            if ($this->input->post('deposit')) {
-                $invoiceNumber      = $this->site->getreference('deposit');
-                $deposit            = array(
-                    'date'          => $this->input->post('date'),
-                    'amount'        => $this->input->post('deposit'),
-                    'type'          => 'deposit',
-                    'payment_status'=> 'unpaid',
-                    'no'            => $invoiceNumber->no,
-                    'invoice_no'    => $invoiceNumber->number,
-                    'created_by'    => $this->session->userdata('user_id'),
-                    'created_at'    => date("Y-m-d H:i:s"),
-                );
-            }
-            if ($_FILES['userfile']['size'] > 0) {
-                $this->tec->uploadFile();
-                $data['image'] = $this->tec->uploadFile();
-            }
-        }
-        if ($this->form_validation->run() == true && $this->bookings_model->saveBookings($data,$rooms,$bookingProducts,$deposit)) {
-            $this->session->set_flashdata('message', lang('customer_added'));
-            redirect('bookings');
-        } else {
-            $this->data['branches']   = $this->site->getAllBranches();
-            $products                 = $this->site->getAllProducts();
-            $options                  = "<option>".lang("please_select")."</option>";
-            foreach ($products as $key => $row) {
-                $options .= '<option value="'.$row->id.'">'.$row->name.'</option>';
-            }
-            $this->data['options']    = $options;
-            $this->data['error']      = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
-            $this->data['page_title'] = lang('bookings');
-            $this->data['banks']      = $this->site->getAllBanks();
-            $bc                       = [['link' => site_url('bookings'), 'page' => lang('bookings')], ['link' => '#', 'page' => lang('bookings')]];
-            $meta                     = ['page_title' => lang('new_booking'), 'bc' => $bc];
-            $this->page_construct('bookings/add', $this->data, $meta);
-        }
-    }
-    public function delete($id = null) {
-        $this->checkRule('customer_delete', true);
-        if ($this->customer_model->deleteCustomer($id)) {
-            $this->session->set_flashdata('message', lang('customer_deleted'));
-            redirect('customers');
-        }
-    }
-    public function edit($id = null) {
-        $this->checkRule('customer_edit', false);
-        $this->form_validation->set_rules('name', lang('name'), 'required');
-        $this->form_validation->set_rules('branch', lang('branches'), 'required');
-        if ($this->form_validation->run() == true) {
-            $data = [
-                'branch_id'         => $this->input->post('branch'),
-                'name'              => $this->input->post('name'),
-                'phone'             => $this->input->post('phone'),
-                'address'           => $this->input->post('address'),
-            ];
-            if ($_FILES['userfile']['size'] > 0) {
-                $this->tec->uploadFile();
-                $data['image'] = $this->tec->uploadFile();
-            }
-        }
-        if ($this->form_validation->run() == true && $this->site->updateTable($id, $data, 'customers')) {
-            $this->session->set_flashdata('message', lang('customer_added'));
-            redirect('customers');
-        } else {
-            $this->data['rowData']    = $this->site->getDataID($id, 'customers');
-            $this->data['branches']   = $this->site->getAllBranches();
-            $this->data['error']      = (validation_errors()?validation_errors() : $this->session->flashdata('error'));
-            $this->data['page_title'] = lang('edit_customer');
-            $bc                       = [['link' => site_url('customers'), 'page' => lang('customers')], ['link' => '#', 'page' => lang('update_customer')]];
-            $meta                     = ['page_title' => lang('update_customer'), 'bc' => $bc];
-            $this->page_construct('customers/edit', $this->data, $meta);
-        }
-    }
-    public function getbookings() {
-        $viewbooking=   '<a class="dropdown-item" href="'.site_url('bookings/view/$1').'"><i class="fa fa-print text-primary"></i> '.lang('print').'</a>';
-        $update     =   '<a class="dropdown-item" href="'.site_url('customers/edit/$1').'"><i class="fa fa-edit text-primary"></i> '.lang('update').'</a>';
-        $delete     =   '<a class="dropdown-item delete-confirm" href="'.site_url('customers/delete/$1').'"><i class="fa fa-trash text-danger"></i> '.lang('delete').'</a>';
-        $actions    =   '<div class="dropdown">
-                            <button type="button" class="btn btn-default btn-sm dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="fas fa-list"></i>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li>'.$viewbooking.'</li>
-                                <li>'.$update.'</li>
-                                <li>'.$delete.'</li>
-                            </ul>
-                        </div>';
-        $this->load->library('datatables');
-        $this->datatables->select('bookings.id, bookings.image, bookings.phone, bookings.name,DATE(booking_date) as booking_date,bookings.status,bookings.created_at,branches.branch_kh as branch_name');
-        $this->datatables->from('bookings');
-        $this->datatables->join('branches','branches.id=bookings.branch_id');
-        $this->datatables->add_column('Actions',$actions, 'id');
-        $this->datatables->unset_column('id');
-        echo $this->datatables->generate();
-    }
+
+    // 1. Index List View
     public function index() {
-        $this->checkRule('customer_view', false);
-        $this->data['error'] = (validation_errors() ? validation_errors() : $this->session->flashdata('error'));
-        $bc                  = [['link' => site_url('bookings'), 'page' => lang('list_bookings')]];
-        $meta                = ['page_title' => lang('list_bookings'), 'bc' => $bc];
+        $bc = [['link' => site_url('sales'), 'page' => lang('sales')]];
+        $meta = ['page_title' => lang('sales'), 'bc' => $bc];
         $this->page_construct('sales/index', $this->data, $meta);
     }
-    function getRoomsBybranchs () {
-        $branch     = $this->input->get('branch');
-        $this->db->where('branch_id', $branch);
-        $this->db->where('deleted', 0);
-        $this->db->where('id NOT IN(SELECT room_id FROM booking_details JOIN bookings ON bookings.id=booking_details.booking_id WHERE status <> "checked_out")');
-        $rooms      = $this->db->get('rooms')->result();
-        $options    = "<option>".lang("please_select")."</option>";
-        foreach ($rooms as $key => $row) {
-            $options .= "<option value='".$row->id."'>".$row->name."</option>";
+
+    public function get_sales() {
+        // Dropdown Action Menu Template
+        $actions = '
+        <div class="dropdown">
+            <button class="action-btn d-inline-flex align-items-center justify-content-center" data-bs-toggle="dropdown">
+                <span class="material-icons-outlined">menu</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                <li>
+                    <a class="dropdown-item" href="' . site_url('sales/view_invoice/$1') . '" target="_blank">
+                        <span class="material-icons-outlined fs-6 me-2 text-primary">description</span> ' . lang('invoice') . '
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="' . site_url('sales/edit/$1') . '">
+                        <span class="material-icons-outlined fs-6 me-2 text-warning">edit</span> ' . lang('edit') . '
+                    </a>
+                </li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                    <a class="dropdown-item text-danger delete-confirm" href="' . site_url('sales/delete/$1') . '">
+                        <span class="material-icons-outlined fs-6 me-2">delete</span> ' . lang('delete') . '
+                    </a>
+                </li>
+            </ul>
+        </div>';
+
+        $this->load->library('datatables');
+        $this->datatables
+            ->select("
+                sales.id as id, 
+                sales.date as date, 
+                customers.name as customer, 
+                branches.branch_kh as branch_name, 
+                sales.total_items as total_items, 
+                sales.grand_total as grand_total, 
+                sales.paid_amount as paid_amount, 
+                sales.payment_status as payment_status
+            ")
+            ->from("sales")
+            ->join("customers", "customers.id = sales.customer_id", "left")
+            ->join("branches", "branches.id = sales.branch_id", "left")
+            ->where("sales.is_deleted", 0) // Exclude soft-deleted records
+            ->add_column("Actions", $actions, "id");
+        
+        echo $this->datatables->generate();
+    }
+
+    public function view_invoice($id = null) {
+        if (!$id) redirect('sales');
+        
+        $this->data['sale'] = $this->sales_model->getSaleByID($id);
+        $this->data['items'] = $this->sales_model->getSaleItems($id);
+        
+        if (!$this->data['sale']) {
+            $this->session->set_flashdata('error', lang('sale_not_found'));
+            redirect('sales');
         }
-        echo json_encode($options);
+
+        $this->load->view($this->theme . 'sales/invoice', $this->data);
     }
-    function getRoombookings () {
-        $roomId     = $this->input->get('room');
-        $rowNumber  = $this->input->get('row');
-        $this->db->select('rooms.*,floors.name as floor');
-        $this->db->from('rooms');
-        $this->db->join('floors', 'floors.id = rooms.floor_id');
-        $this->db->where('rooms.id', $roomId);
-        $roomInfo = $this->db->get()->row();
-        $html   = "<tr>";
-        $html   .= "<td class='text-center room-bg'>".$rowNumber."</td>";
-        $html   .= '<td class="rowDate room-bg"><input type="text" name="checkin_date[]" class="form-control input-sm ç" value=""></td>';
-        $html   .= '<td class="rowFloor room-bg">
-                    <input type="hidden" name="floorId[]" value="'.$roomInfo->floor_id.'">'.$roomInfo->floor.'</td>';
-        $html   .= '<td class="rowName room-bg"><input type="hidden" name="roomId[]" value="'.$roomInfo->id.'">'.$roomInfo->name.'</td>';
-        $html   .= '<td class="rowMonths room-bg"><input type="text" name="duration_months[]" class="form-control input-sm" value=""></td>';
-        $html   .= '<td class="rowCheckout room-bg"><input type="text" name="check_out_date[]" class="form-control input-sm datepicker" value=""></td>';
-        $html   .= '<td class="rowPrice room-bg"><input type="text" name="roomPrice[]" class="form-control input-sm subtotal" value="'.($roomInfo->price * 1).'"></td>';
-        $html   .= '<td class="text-center room-bg"><i class="fa fa-plus-circle fa-2x newRoom"></i></td>';
-        $html   .= "</tr>";
-        echo json_encode($html);
+
+    // 3. Create Sale
+    public function create() {
+        $this->form_validation->set_rules('customer_id', lang('customer'), 'required');
+        if ($this->form_validation->run() == true) {
+            $data   = $this->_prepare_data();
+            $items  = $this->_prepare_items();
+            if ($this->sales_model->addSale($data, $items)) {
+                $this->session->set_flashdata('message', "Sale created successfully");
+                redirect('sales');
+            }
+        } else {
+            $this->data['customers'] = $this->site->getAllCustomers();
+            $this->data['branches'] = $this->sales_model->getAllBranches();
+            $this->page_construct('sales/create', $this->data, ['page_title' => 'Create Sale']);
+        }
     }
-    function getServicesId() {
-        $serviceId = $this->input->get('serviceId');
-        $row       = $this->bookings_model->getServiceDetail($serviceId);
-        echo  json_encode($row);
+
+    // 4. Update Sale
+    public function edit($id = NULL) {
+        if ($this->form_validation->run('customer_id') == true) {
+            $data = $this->_prepare_data();
+            $items = $this->_prepare_items();
+            if ($this->sales_model->updateSale($id, $data, $items)) {
+                $this->session->set_flashdata('message', "Sale updated successfully");
+                redirect('sales');
+            }
+        } else {
+            $this->data['sale'] = $this->sales_model->getSaleByID($id);
+            $this->data['items'] = $this->sales_model->getSaleItems($id);
+            $this->data['customers'] = $this->site->getAllCustomers();
+            $this->data['branches'] = $this->sales_model->getAllBranches();
+            $this->page_construct('sales/edit', $this->data, ['page_title' => 'Edit Sale']);
+        }
     }
-    function view ($id=null) {
-        $this->data['page_title'] = lang('login');
-        $this->page_construct('bookings/invoice', $this->data, $meta);
+    public function delete($id) {
+        if ($this->sales_model->deleteSale($id, $this->session->userdata('user_id'))) {
+            $this->session->set_flashdata('message', "Sale deleted");
+        }
+        redirect('sales');
     }
-    function deposit ($id=null) {
-        $bc                       = [['link' => site_url('bookings'), 'page' => lang('list_bookings')]];
-        $meta                     = ['page_title' => lang('list_bookings'), 'bc' => $bc];
-        $this->page_construct('invoices/deposit', $this->data, $meta);
+    public function suggestions() {
+        $term = $this->input->get('term', TRUE);
+        if (empty($term)) {
+            echo json_encode([]);
+            return;
+        }
+        $this->db->select('products.id, products.name, products.code, products.price, units.name as unit_name');
+        $this->db->from('products');
+        $this->db->join('units', 'units.id = products.unit_id', 'left');
+        $this->db->group_start();
+            $this->db->like('products.name', $term);
+            $this->db->or_like('products.code', $term);
+        $this->db->group_end();
+        $this->db->where('products.active', 1);
+        $this->db->where('products.deleted', 0);
+        $this->db->limit(15);
+        
+        $query = $this->db->get();
+        $rows = $query->result();
+
+        $result = [];
+        foreach ($rows as $row) {
+            $result[]   = [
+                'id'    => $row->id,
+                'text'  => $row->code . ' - ' . $row->name, 
+                'price' => (float)$row->price,
+                'unit'  => $row->unit_name ? $row->unit_name : 'Unit'
+            ];
+        }
+
+        echo json_encode($result);
+    }
+    private function _prepare_data() {
+        $input_date     = $this->input->post('date');
+        $ref_data       = $this->site->get_next_reference('sales', $input_date);
+        return [
+            'date'              => $this->input->post('date'),
+            'no'                => $ref_data->no,
+            'invoice_no'        => $ref_data->reference,
+            'customer_id'       => $this->input->post('customer_id'),
+            'branch_id'         => $this->input->post('branch_id'),
+            'total_price'       => $this->input->post('total_price'),
+            'order_discount'    => $this->input->post('order_discount'),
+            'order_discount_id' => $this->input->post('order_discount_id'),
+            'grand_total'       => $this->input->post('grand_total'),
+            'payment_status'    => $this->input->post('payment_status'),
+            'created_by'        => $this->session->userdata('user_id')
+        ];
+    }
+    private function _prepare_items() {
+        $items = [];
+        foreach ($this->input->post('product_id') as $k => $v) {
+            $items[] = [
+                'product_id'    => $v, 
+                'unit_name'     => $_POST['unit_name'][$k],
+                'quantity'      => $_POST['quantity'][$k], 
+                'unit_price'    => $_POST['unit_price'][$k],
+                'discount_type' => $_POST['item_discount_type'][$k],
+                'item_discount' => $_POST['item_discount'][$k], 
+                'subtotal'      => $_POST['subtotal'][$k]
+            ];
+        }
+        return $items;
     }
 }

@@ -47,7 +47,7 @@ window.addEventListener('load', function() {
             }
         },
         columns: [
-            { "data": "image", "searchable": false, "orderable": false, "render": dislayImage, className: "ps-4" },
+            { "data": "image", "searchable": false, "orderable": false, "render": dislayImage, className: "ps-4 text-center" },
             { data: "code", className: "fw-bold text-dark font-mono small" },
             { data: "name", className: "fw-semibold small" },
             { data: "category", className: "small" },

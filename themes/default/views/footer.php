@@ -13,6 +13,8 @@
 <script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap5.min.js"></script>
 <script>
     var base_url = `<?=base_url()?>`;
+
+    // ... (Your existing window load code stays here) ...
     window.addEventListener('load', function() {
         setTimeout(function() {
             var loader = document.getElementById('pageLoader');
@@ -22,21 +24,41 @@
             }
         }, 300); 
     });
+
     $(document).ready(function() {
+        // 1. Sidebar Active State
         var currentUrl = window.location.href.split('?')[0];
         $('.sidebar-menu a').each(function() {
             var linkUrl = this.href.split('?')[0];
             if (currentUrl === linkUrl) {
                 $(this).addClass('active');
+                $(this).closest('.submenu-link').addClass('active'); // Highlight submenu item
                 var parentLi = $(this).closest('.menu-item.has-child');
                 if (parentLi.length > 0) {
                     parentLi.addClass('expanded');
                 }
             }
         });
+
+        // 2. FIXED: Sidebar Menu Click Event (This was missing)
+        $('.sidebar-menu .has-child > .menu-link').on('click', function(e) {
+            e.preventDefault(); // Stop # link from jumping
+            var $parentLi = $(this).closest('.menu-item');
+
+            // Check if we are closing or opening
+            if ($parentLi.hasClass('expanded')) {
+                $parentLi.removeClass('expanded');
+            } else {
+                // Optional: Close other open menus so only one stays open (Accordion style)
+                $('.menu-item.expanded').removeClass('expanded'); 
+                $parentLi.addClass('expanded');
+            }
+        });
         if ($('.select2-basic').length > 0) {
             $('.select2-basic').select2({ width: '100%', minimumResultsForSearch: Infinity }); 
         }
+
+        // 4. Image Upload Logic
         const fileInput = $('#imageInput');
         const uploadBox = $('#uploadBox');
         if (uploadBox.length) {
@@ -73,31 +95,53 @@
             toggleSidebarMobile(); 
         }
     }
+    
     function toggleSidebarMobile() {
         var sidebar = $('#sidebar');
         sidebar.toggleClass('active');
         $('#mobOverlay').toggleClass('show');
     }
-    function toggleSubmenu(element) {
-        if(event) event.preventDefault(); 
-        var $parentLi = $(element).closest('li');
-        if ($parentLi.hasClass('expanded')) {
-            $parentLi.removeClass('expanded');
-        } else {
-            $('.menu-item.expanded').removeClass('expanded');
-            $parentLi.addClass('expanded');
+    $(document).ready(function() {
+        <?php if ($error) { ?>
+            showToast('error', '<?= lang("error"); ?>', '<?= addslashes($error); ?>');
+        <?php } if ($warning) { ?>
+            showToast('warning', '<?= lang("warning"); ?>', '<?= addslashes($warning); ?>');
+        <?php } if ($message) { ?>
+            showToast('success', '<?= lang("Success"); ?>', '<?= addslashes($message); ?>');
+        <?php } ?>
+    });
+    function showToast(type, title, message) {
+        let icon = 'check_circle';
+        let colorClass = 'text-success';
+        let borderClass = 'border-success';
+
+        if (type === 'error') {
+            icon = 'cancel';
+            colorClass = 'text-danger';
+            borderClass = 'border-danger';
+        } else if (type === 'warning') {
+            icon = 'warning';
+            colorClass = 'text-warning';
+            borderClass = 'border-warning';
         }
-    }
-    function triggerSave() {
-        var $btn = $('#btnSave');
-        var originalContent = $btn.html();
-        $btn.html('<span class="btn-spinner"></span> Saving...').prop('disabled', true);
-        setTimeout(function() {
-            $btn.html(originalContent).prop('disabled', false);
-            var toastHTML = `<div class="custom-toast"><span class="material-icons-outlined text-success fs-3 me-3">check_circle</span><div><div class="fw-bold" style="font-size:13px">Success</div><small class="text-muted" style="font-size:11px">Saved successfully</small></div></div>`;
-            $('#toastContainer').append(toastHTML);
-            setTimeout(() => { $('.custom-toast').last().fadeOut(300, function(){ $(this).remove(); }); }, 3000);
-        }, 800);
+
+        const toastHTML = `
+            <div class="custom-toast ${borderClass}">
+                <span class="material-icons-outlined ${colorClass} fs-3 me-3">${icon}</span>
+                <div>
+                    <div class="fw-bold" style="font-size:13px">${title}</div>
+                    <small class="text-muted" style="font-size:11px">${message}</small>
+                </div>
+            </div>`;
+
+        $('#toastContainer').append(toastHTML);
+
+        // Auto-remove after 4 seconds
+        setTimeout(() => {
+            $('.custom-toast').first().fadeOut(300, function() {
+                $(this).remove();
+            });
+        }, 4000);
     }
 </script>
 </body>

@@ -906,180 +906,22 @@ class Site extends CI_Model
         }
         return false;
     }
-    public function getAllWarehouse()
-    {
-        $q = $this->db->get('stores');
-        if ($q->num_rows() > 0) {
-            foreach (($q->result()) as $row) {
-                $data[] = $row;
-            }
-            return $data;
-        }
-        return false;
-    }
-    public function getAllexpenseType()
-    {
-        $q = $this->db->get('expensetype');
-        if ($q->num_rows() > 0) {
-            foreach (($q->result()) as $row) {
-                $data[] = $row;
-            }
-            return $data;
-        }
-        return false;
-    }
-    public function getproduct($category_id)
-    {
-        $this->db->select('products.name,products.price,products.image,categories.name as cname');
-        $this->db->from('products');
-        $this->db->join('categories', 'categories.id = products.category_id');
-        if ($category_id) {
-            $this->db->where('categories.id', $category_id);
-        }
-        return $this->db->get()->result();
-    }
-    public function getAllprinter($suspend_id = null)
-    {
-        $this->db->select('pro.printer');
-        $this->db->from('suspended_items si');
-        $this->db->join('products pro', 'si.product_id = pro.id');
-        $this->db->where('si.suspend_id', $suspend_id);
-        $this->db->where('si.is_print <>1');
-        $this->db->group_by('pro.printer');
-        return $this->db->get()->result();
-    }
-    public function getunitStock($product_id = null, $unit_id = null, $stock_unit = null)
-    {
-        $unit = $this->site->getDataID($stock_unit, 'units');
-        if ($unit->operation == '*') {
-            $this->db->select('v.*,u.name as stock_unit');
-            $this->db->from('view_stocks v');
-            $this->db->join('units u', 'u.id = v.base_unit');
-            $this->db->where('v.product_id', $product_id);
-            $this->db->where('v.id', $stock_unit);
-            $this->db->where('v.base_unit', $unit_id);
-            $row             = $this->db->get()->row();
-            $row->operation  = '/';
-            $row->stock_unit = $row->name;
-            return $row;
-        } else {
-            $this->db->select('v.*,u.name as stock_unit');
-            $this->db->from('view_stocks v');
-            $this->db->join('units u', 'u.id = v.base_unit');
-            $this->db->where('v.product_id', $product_id);
-            $this->db->where('v.id', $unit_id);
-            $this->db->where('v.base_unit', $stock_unit);
-            return $this->db->get()->row();
-        }
-    }
-    public function getquerNumber()
-    {
-        $this->db->select('*');
-        $this->db->from('ordernumbers');
-        $row    = $this->db->get()->row();
-        $number = sprintf("%03s", ($row->no) + 1);
-        if ($row->no == null or $row->no == 100) {
-            $number = sprintf("%03s", +1);
-        }
-        return $number;
-    }
-    public function reSetQuer()
-    {
-        $this->db->where('id', 1)->delete('ordernumbers');
-        return true;
-    }
-    public function insertQuer($ordernumber = null)
-    {
-        $this->db->insert('ordernumbers', ['no' => $ordernumber, 'id' => 1]);
-        return true;
-    }
-    public function getAllSubCategories()
-    {
-        $q = $this->db->get('subcategory');
-        if ($q->num_rows() > 0) {
-            foreach (($q->result()) as $row) {
-                $data[] = $row;
-            }
-            return $data;
-        }
-        return false;
-    }
-    public function getAllCategory()
-    {
-        $q = $this->db->get('categories');
-        if ($q->num_rows() > 0) {
-            foreach (($q->result()) as $row) {
-                $data[] = $row;
-            }
-            return $data;
-        }
-        return false;
-    }
-    public function getAllCategoriesview()
-    {
-        $this->db->select('*');
-        $this->db->from('vcategories');
-        return $this->db->get()->result();
-    }
-    public function getSubByID($id)
-    {
-        $q = $this->db->get_where('subcategory', ['id' => $id], 1);
-        if ($q->num_rows() > 0) {
-            return $q->row();
-        }
-        return false;
-    }
-    public function Checkpromotion()
-    {
-        return 0;
-    }
-    public function insertTable($data = [], $table = null) {
-        if ($this->db->insert($table, $data)) {
-            return true;
-        }
-        return false;
-    }
-    public function updateTable($id = null, $data = [], $table = null) {
-        if ($this->db->where('id', $id)->update($table, $data)) {
-            return true;
-        }
-        return false;
-    }
-    function getAllBranches () {
-        $this->db->select('*');
-        $this->db->from('branches');
-        $this->db->where('delete',0);
-        $this->db->where('active',1);
-        $this->db->order_by('order_display');
-        return $this->db->get()->result();
-    }
-    function getAllFloors ($branch=null) {
-        $this->db->select('*');
-        $this->db->from('floors');
-        $this->db->where('deleted',0);
-        $this->db->where('active',1);
-        if ($branch) {
-            $this->db->where('branch_id', $branch);
-        }
-        $this->db->order_by('order_display');
-        return $this->db->get()->result();
-    }
-    function getAllProducts () {
-        $this->db->select('products.id,products.name,products.code,categories.name as category,units.name as unit,products.unit_id');
-        $this->db->from('products');
-        $this->db->join('categories', 'categories.id = products.category_id');
-        $this->db->join('units', 'units.id = products.unit_id');
-        return $this->db->get()->result();
-    }
-    function getServices () {
-        $this->db->select('*');
-        $this->db->from('products');
-        return $this->db->get()->result();
-    }
-    public function getAllBanks() {
-        $this->db->select('*');
-        $this->db->from('banks');
-        $s = $this->db->get()->result();
-        return $s;
+    public function get_next_reference($table = 'sales', $date = null) {
+        $target_date = $date ? $date : date('Y-m-d');
+        $year = date('y', strtotime($target_date)); 
+        
+        $this->db->select_max('no');
+        $this->db->where('DATE_FORMAT(date, "%y") =', $year);
+        $this->db->where('is_deleted', 0);
+        $query = $this->db->get($table);
+        $last_record = $query->row();
+        
+        $next_no = ($last_record && $last_record->no) ? ($last_record->no + 1) : 1;
+        $formatted_ref = $year . '-' . str_pad($next_no, 6, '0', STR_PAD_LEFT);
+        
+        return (object) [
+            'no' => $next_no,
+            'reference' => $formatted_ref
+        ];
     }
 }

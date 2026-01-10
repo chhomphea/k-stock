@@ -62,8 +62,8 @@ class Products extends MY_Controller {
                 'cost'          => $this->input->post('cost'),
                 'price'         => $this->input->post('price'),
                 'cost'          => $this->input->post('cost'),
-                // 'active'        => $this->input->post('display'),
-                // 'order_display' => $this->input->post('order_display'),
+                'active'        => $this->input->post('display'),
+                'order_display' => $this->input->post('order_display'),
                 'updated_by'    => $this->session->userdata('user_id'),
             ];
             if ($_FILES['userfile']['size'] > 0) {

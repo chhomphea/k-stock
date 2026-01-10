@@ -20,7 +20,30 @@
             --sidebar-width: 270px; --header-height: 60px;
             --input-height: 36px; --radius-md: 3px; --font-size: 13px;
         }
-        @media (min-width: 1600px) { :root { --sidebar-width: 320px; } }
+        ::-webkit-scrollbar {
+            width: 1px;  /* Width for vertical scrollbars */
+            height:1px; /* Height for horizontal scrollbars (tables) */
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; /* Soft grey color */
+            border-radius: 3px;   /* Rounded edges */
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; /* Darker grey when you grab it */
+        }
+
+        /* Firefox Support */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+        @media (min-width: 1600px) { :root { --sidebar-width: 300px; } }
         @media (max-width: 1366px) { :root { --sidebar-width: 240px; } }
         @media (max-width: 992px)  { :root { --sidebar-width: 0px; } }
         html, body { height: 100%; margin: 0; padding: 0; }
@@ -100,8 +123,8 @@
 
         /* --- TABLE FIXES FOR MOBILE --- */
         table.dataTable.no-footer { border-bottom: 1px solid #f1f5f9; }
-        table.dataTable thead th { border-bottom: 1px solid #f1f5f9 !important; font-weight: 600; font-size: 12.5px; color: #64748b; background-color: #f8fafc; padding: 8px 10px !important; white-space: nowrap; }
-        table.dataTable tbody td { border-bottom: 1px solid #f1f5f9; font-size: 13px; padding: 8px 10px !important; vertical-align: middle; white-space: nowrap; }
+        table.dataTable thead th { border-bottom: 1px solid #f1f5f9 !important; font-weight: 600; font-size: 12.5px; color: #64748b; background-color: #f8fafc; white-space: nowrap; }
+        table.dataTable tbody td { border-bottom: 1px solid #f1f5f9; font-size: 13px; vertical-align: middle; white-space: nowrap; padding: 4px !important;}
         
         /* Ensure DataTables scroll body handles overflow */
         div.dataTables_wrapper div.dataTables_scrollBody { overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
@@ -109,7 +132,7 @@
         .dataTables_scrollHeadInner table { width: 100% !important; margin-bottom: 0 !important; }
         .dataTables_scrollBody table { margin-top: 0 !important; width: 100% !important; }
         
-        .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter { padding: 10px 14px !important; color: var(--text-muted); display: flex; align-items: center; }
+        .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter { padding: 5px 7px !important; color: var(--text-muted); display: flex; align-items: center; }
         .dataTables_length select { border: 1px solid var(--input-border) !important; border-radius: var(--radius-md) !important; padding: 4px 30px 4px 10px !important; font-size: 13px !important; color: var(--text-main) !important; margin: 0 8px !important; min-width: 75px !important; background-color: #fff !important; appearance: none !important; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important; background-repeat: no-repeat !important; background-position: right 0.6rem center !important; background-size: 10px 10px !important; }
         .dataTables_filter input { border: 1px solid #e2e8f0; border-radius: var(--radius-md); padding: 5px 10px; font-size: 13px; height: 32px; }
         .dataTables_filter input:focus { outline: none; border-color: var(--primary); }
@@ -128,8 +151,62 @@
             .card-body { padding: 15px; }
             /* Force Smaller Font on Mobile */
             table.dataTable thead th { font-size: 11px !important; padding: 8px 10px !important; }
-            table.dataTable tbody td { font-size: 11.5px !important; padding: 6px 10px !important; }
+            table.dataTable tbody td { font-size: 11.5px !important;}
         }
+        /* --- ADD THIS TO YOUR CSS --- */
+            .mobile-overlay {
+                position: fixed; 
+                top: 0; 
+                left: 0; 
+                width: 100%; 
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5); /* Dimmed background */
+                z-index: 1045; /* Below sidebar (1050) but above header (1040) */
+                display: none;
+                transition: opacity 0.3s;
+            }
+
+            /* Ensure the sidebar close button is only visible on mobile */
+            .mobile-close-btn { display: none; }
+
+            @media (max-width: 991.98px) {
+                /* Existing code... */
+                .mobile-overlay.show { display: block; }
+                
+                /* Show close button on mobile inside sidebar */
+                .mobile-close-btn { 
+                    display: flex; 
+                    justify-content: flex-end; 
+                    padding: 10px 15px;
+                }
+            }
+            /* --- TOAST NOTIFICATION --- */
+            .toast-container {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 9999; /* Ensure it stays on top of everything */
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .custom-toast {
+                background: #fff;
+                min-width: 300px;
+                padding: 16px;
+                border-radius: 4px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                border-left: 4px solid #10b981; /* Green success border */
+                display: flex;
+                align-items: center;
+                animation: slideIn 0.3s ease-out forwards;
+            }
+
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
     </style>
 </head>
 <body id="bodyMain">
@@ -163,7 +240,7 @@
                 <a class="menu-link" href="#">
                     <div class="d-flex align-items-center">
                         <span class="material-icons-outlined menu-icon">settings</span>
-                        <span>Setup</span>
+                        <span><?=lang('products')?></span>
                     </div>
                     <span class="material-icons-outlined menu-arrow">expand_more</span>
                 </a>
@@ -178,12 +255,17 @@
                 <a class="menu-link" href="#">
                     <div class="d-flex align-items-center">
                         <span class="material-icons-outlined menu-icon">shopping_cart</span>
-                        <span>Transactions</span>
+                        <span><?=lang('sales')?></span>
                     </div>
                     <span class="material-icons-outlined menu-arrow">expand_more</span>
                 </a>
                 <ul class="submenu">
-                    <li><a href="<?=base_url('sales')?>" class="submenu-link">Sales</a></li>
+                    <li>
+                        <a href="<?=base_url('sales/create')?>" class="submenu-link"><?=lang('add_sale')?></a>
+                    </li>
+                    <li>
+                        <a href="<?=base_url('sales')?>" class="submenu-link"><?=lang('list_sales')?></a>
+                    </li>
                     <li><a href="<?=base_url('purchases')?>" class="submenu-link">Purchases</a></li>
                 </ul>
             </li>
