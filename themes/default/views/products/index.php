@@ -38,7 +38,7 @@ window.addEventListener('load', function() {
         scrollX: true,
         autoWidth: false,
         scrollCollapse: true,
-        dom: "<'d-flex justify-content-between align-items-center'lf>t<'d-flex justify-content-between align-items-center'ip>",
+        dom: "<'d-flex justify-content-between align-items-center'lf>t<'d-flex justify-content-between align-items-center p-1'ip>",
         ajax: {
             url: '<?php echo site_url('products/get_products'); ?>', 
             type: 'POST',
