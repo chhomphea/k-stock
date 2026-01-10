@@ -83,8 +83,8 @@ class Sales extends MY_Controller {
     public function create() {
         $this->form_validation->set_rules('customer_id', lang('customer'), 'required');
         if ($this->form_validation->run() == true) {
-            $data   = $this->_prepare_data();
-            $items  = $this->_prepare_items();
+            $data = $this->_prepare_data();
+            $items = $this->_prepare_items();
             if ($this->sales_model->addSale($data, $items)) {
                 $this->session->set_flashdata('message', "Sale created successfully");
                 redirect('sales');
@@ -151,13 +151,10 @@ class Sales extends MY_Controller {
 
         echo json_encode($result);
     }
+
     private function _prepare_data() {
-        $input_date     = $this->input->post('date');
-        $ref_data       = $this->site->get_next_reference('sales', $input_date);
         return [
             'date'              => $this->input->post('date'),
-            'no'                => $ref_data->no,
-            'invoice_no'        => $ref_data->reference,
             'customer_id'       => $this->input->post('customer_id'),
             'branch_id'         => $this->input->post('branch_id'),
             'total_price'       => $this->input->post('total_price'),
@@ -172,13 +169,10 @@ class Sales extends MY_Controller {
         $items = [];
         foreach ($this->input->post('product_id') as $k => $v) {
             $items[] = [
-                'product_id'    => $v, 
-                'unit_name'     => $_POST['unit_name'][$k],
-                'quantity'      => $_POST['quantity'][$k], 
-                'unit_price'    => $_POST['unit_price'][$k],
+                'product_id' => $v, 'unit_name' => $_POST['unit_name'][$k],
+                'quantity' => $_POST['quantity'][$k], 'unit_price' => $_POST['unit_price'][$k],
                 'discount_type' => $_POST['item_discount_type'][$k],
-                'item_discount' => $_POST['item_discount'][$k], 
-                'subtotal'      => $_POST['subtotal'][$k]
+                'item_discount' => $_POST['item_discount'][$k], 'subtotal' => $_POST['subtotal'][$k]
             ];
         }
         return $items;

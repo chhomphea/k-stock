@@ -3,11 +3,11 @@
     <div class="card card-full">
         <div class="card-header d-flex justify-content-between align-items-center">
             <span class="fw-bold"><?= isset($sale) ? 'Edit Sale: #'.$sale->id : 'Create New Sale' ?></span>
-            <div>
+            <!-- <div>
                 <button type="button" class="btn btn-sm btn-outline-danger" onclick="clearItems()">
                     <span class="material-icons-outlined fs-6">refresh</span> Reset Form
                 </button>
-            </div>
+            </div> -->
         </div>
         
         <div class="card-body">

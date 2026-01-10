@@ -906,22 +906,4 @@ class Site extends CI_Model
         }
         return false;
     }
-    public function get_next_reference($table = 'sales', $date = null) {
-        $target_date = $date ? $date : date('Y-m-d');
-        $year = date('y', strtotime($target_date)); 
-        
-        $this->db->select_max('no');
-        $this->db->where('DATE_FORMAT(date, "%y") =', $year);
-        $this->db->where('is_deleted', 0);
-        $query = $this->db->get($table);
-        $last_record = $query->row();
-        
-        $next_no = ($last_record && $last_record->no) ? ($last_record->no + 1) : 1;
-        $formatted_ref = $year . '-' . str_pad($next_no, 6, '0', STR_PAD_LEFT);
-        
-        return (object) [
-            'no' => $next_no,
-            'reference' => $formatted_ref
-        ];
-    }
 }
