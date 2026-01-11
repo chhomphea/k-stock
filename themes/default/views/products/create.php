@@ -3,7 +3,7 @@
     
     <div class="card shadow-none border-0 rounded-0 h-100">
         
-        <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center" style="border-color: #f3f4f6;">
+        <div class="card-header bg-white py-2 border-bottom d-flex justify-content-between align-items-center" style="border-color: #f3f4f6;">
             <div>
                 <span class="material-icons-outlined fs-5 align-middle me-1 text-dark">inventory_2</span>
                 <span class="fw-bold text-dark">PRODUCT ENTRY</span> <span class="label-kh ms-1 text-muted">(បង្កើតទំនិញ)</span>
