@@ -33,7 +33,7 @@
         body { background-color: var(--bg-body); font-family: 'Inter', 'Nokora', sans-serif; font-size: 13px; color: var(--text-main); }
 
         /* --- LAYOUT --- */
-        .main-header { height: var(--header-height); position: fixed; top: 0; right: 0; left: var(--sidebar-width); background: #fff; border-bottom: 1px solid var(--border-color); z-index: 1040; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; transition: all 0.3s; }
+        .main-header { height: var(--header-height); position: fixed; top: 0; right: 0; left: var(--sidebar-width); background: #fff; border-bottom: 1px solid var(--border-color); z-index: 1040; display: flex; align-items: center; justify-content: space-between; padding: 0 15px; transition: all 0.3s; }
         .main-sidebar { width: var(--sidebar-width); position: fixed; top: 0; bottom: 0; left: 0; background: var(--bg-sidebar); border-right: 1px solid var(--border-color); z-index: 1050; display: flex; flex-direction: column; transition: all 0.3s; }
         .app-container { margin-top: var(--header-height); margin-left: var(--sidebar-width); padding: 0; min-height: calc(100vh - var(--header-height) - 40px); transition: all 0.3s; }
 
@@ -58,7 +58,7 @@
         .form-control:focus, .form-select:focus { border-color: var(--primary) !important; }
 
         .input-group .input-group-text { background-color: #f9fafb; color: #6b7280; border-right: 0 !important; padding: 0 10px; font-weight: 500; }
-        .input-group .form-control { border-left: 0 !important; }
+/*        .input-group .form-control { border-left: 0 !important; }*/
         .input-group:focus-within .input-group-text, .input-group:focus-within .form-control { border-color: var(--primary) !important; }
 
         /* Select2 Alignment */
@@ -90,6 +90,7 @@
         .submenu-link.active .material-icons-outlined { opacity: 1; color: var(--primary); }
 
         .btn { padding: 0 16px; height: 35px; display: inline-flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; border-radius: 4px; }
+        table .btn { padding: 0 16px; height: 25px; display: inline-flex; align-items: center; justify-content: center; font-weight: 500; font-size: 13px; border-radius: 4px; }
         .header-search { height: 34px; background: #f9fafb; border: 1px solid transparent; border-radius: 6px; padding-left: 35px; font-size: 13px; width: 280px; }
         .header-search:focus { background: #fff; border-color: #e5e7eb; outline: none; }
         
@@ -99,6 +100,10 @@
             .main-sidebar.active { transform: translateX(0); }
             .main-header, .app-container, .main-footer { left: 0; margin-left: 0; width: 100%; }
             .sidebar-close-btn { display: block; }
+        }
+        .action-btn{
+            background: none !important;
+            border: none !important;
         }
     </style>
 </head>
@@ -154,8 +159,8 @@
                 <span class="material-icons-outlined fs-3">menu</span>
             </button>
             <div class="position-relative d-none d-md-block">
-                <span class="material-icons-outlined position-absolute text-muted" style="left: 10px; top: 8px; font-size:18px;">search</span>
-                <input type="text" class="header-search" placeholder="Search...">
+                <!-- <span class="material-icons-outlined position-absolute text-muted" style="left: 10px; top: 8px; font-size:18px;">search</span>
+                <input type="text" class="header-search" placeholder="Search..."> -->
             </div>
         </div>
         <div class="d-flex align-items-center gap-2">
